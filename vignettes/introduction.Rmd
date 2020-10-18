@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 ```
 
 The Salem package is based on the 
-[https://www.tulane.edu/~salem/](The Salem Withcraft Website) created by
+[The Salem Withcraft Website](https://www.tulane.edu/~salem/) created by
 Richard Latner.  The package includes all of the data sets from the website
 as R data frames.  The data have been reorganized from the original structure
 for ease of use in R.  (Copies of the original tab delimited raw data sets
@@ -32,14 +32,14 @@ A detailed discussion of the data sources can be found on the
 [https://www.tulane.edu/~salem/Notes.html]( the notes page of the website).
 
 A list of scholarly sources about the Salem witch trials (through about 2008)
-is on the [https://www.tulane.edu/~salem/Bibliography.html] (bibliography page).
+is on the [bibliography page](https://www.tulane.edu/~salem/Bibliography.html).
 
 An updated list of reference website links from the bibliography page 
 is given here.
 
- - [http://www.17thc.us/primarysources/](A Guide to the On-Line Primary Sources of the Salem Witch Trials)
- -  [https://www.danverslibrary.org/archive/welcome-to-the-danvers-archival-center-website/](Danvers Archival Center)
- - Famous Trials: Salem Witchcraft Trials (1692) [https://famous-trials.com/salem]
- -[http://salem.lib.virginia.edu/home.html] (Salem Witch Trials: Documentary Archive and Transcription Project)
+ - [A Guide to the On-Line Primary Sources of the Salem Witch Trials](http://www.17thc.us/primarysources/)
+ - [Danvers Archival Center](https://www.danverslibrary.org/archive/welcome-to-the-danvers-archival-center-website/)
+ - [Famous Trials: Salem Witchcraft Trials (1692)] (https://famous-trials.com/salem)
+ - [Salem Witch Trials: Documentary Archive and Transcription Project]([http://salem.lib.virginia.edu/home.html)
  
  
