@@ -3,6 +3,7 @@
 # are in the repository for reproducability purposes.
 
 accused_witches <- read.table("rawdata/Accused_Witches_Data_Set.txt", sep = '\t',header = TRUE)
+accused_witches$Month.of.Accusation[accused_witches$Month.of.Accusation == -1] <- NA
 save(accused_witches, file = "data/accused_witches.rda")
 
 # Data reproduced in other data sets
