@@ -1,18 +1,17 @@
 Package: salem
 Type: Package
 Title: Provides Access to Salem Witchcraft Data
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: 
     c(person(given = "Elin",
              family = "Waring",
              role = c("aut", "cre"),
-             email = "elin.waring@gmail.com")
+             email = "elin.waring@gmail.com"),
       person(given = "Richard",
              family = "Latner",
              role = c("aut"),
              email = "latner@tulane.edu")
-             )
-Maintainer: elin.waring@gmail.com
+       )
 Description: Data related to the Salem Witch Trials
     Datasets and tutorials documenting the witch accusations and trials 
     centered around Salem, Massachusetts in 1692. Originally assembled by
@@ -25,12 +24,13 @@ License: CC BY-NC-SA 4.0
 Encoding: UTF-8
 LazyData: true
 Depends:
-    R (>= 3.1.2)
+    R (>= 3.5.0)
 Imports: ggplot2,
          dplyr (>= 1.0.0),
-         stats
+         stats,
+         tidyr
 Suggests:
-    lubridate,
+    knitr,
     learnr,
     rmarkdown,
     testthat (>= 2.0.0)
@@ -43,3 +43,4 @@ Collate:
     "committee_list.R"
     "salem_village.R"
     "tax_comparison.R"
+    "parris_social.R"

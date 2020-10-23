@@ -12,7 +12,8 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  message = FALSE
 )
 library(dplyr)
 library(ggplot2)
@@ -28,23 +29,32 @@ reproduce those analyses using R.  In some cases the analyses will be
 extended in order to illustrate points in the website text that were
 not easily expressible in Excel. 
 
-While the website has seven data sets, the package has only 6. This is 
+While the website has seven data sets, the package has only 5. This is 
 because R makes it relatively simple to manipulate the data and also
 because this organization is more in line with how social scientists would 
-likely create a data set.
+likely create a data set today.
 
 As is always true in R, there are many different ways to do the same thing. 
 If you are using this for teaching purposes you will likely want to use
 the approach that most closely matches what you are doing in your course and
 what your goals are for students to work on their own analyses. The focus
-of this document is on use of _ggplot2_ and the base R plotting system. 
+of this document is on use of _ggplot2_ for graphing and in a subsequent iteration
+will also illustrate use of the base R plotting system. There are some 
+examples that use the tidyverse for analysis and some that use base R. 
 However, even within these major groupings there are many ways to acheive
 the same goals.  
 
 Most of the analyses presented are graphical and so that will be the focus 
 here. However some preprocessing will also be illustrated.
 
-This version does not yet include spatial analysis.
+This version does not yet include spatial analysis, but that is on the.
+
+For the ggplots this theme is being used in may cases.
+
+```{r}
+salem_theme <-  theme(axis.text.x = element_text(angle = 45, vjust = .5))
+```
+
 
 ## Ggplot and the Tidyverse
 
@@ -54,13 +64,14 @@ The website includes displays of the distribution by month.
 
 #### Histogram and frequency table by month
 
-```{r}
+```{r fig.width=5}
 ggplot(data = accused_witches) + 
        aes(x = Month.of.Accusation.Name) +
        geom_bar() +
        #geom_dotplot(dotsize = .17, method = "histodot", binwidth = 1, fill = "red") +
        labs(title = "Accusations by month", x = "Month")  +
-       scale_x_discrete(drop = FALSE)
+       scale_x_discrete(drop = FALSE) +
+       salem_theme
 
 table(accused_witches$Month.of.Accusation.Name, useNA = "ifany", 
       dnn = "Month") %>% kable(caption = "Accusations by Month")
@@ -70,7 +81,7 @@ table(accused_witches$Month.of.Accusation.Name, useNA = "ifany",
 
 
 #### Cumulative accusations by month
-```{r}
+```{r fig.width=5}
 ggplot(data = accused_witches) + 
        aes(x = as.numeric(Month.of.Accusation.Name)) +
        stat_ecdf(na.rm = TRUE, geom = "line") +
@@ -92,7 +103,7 @@ is that it is easier to create a Pareto Histogram as displayed on the
 website. These examples show three possible ways to display the Pareto 
 histogram.  As usual there are other approaches. 
 
-```{r message=FALSE}
+```{r message=FALSE, fig.width=5}
 monthly_accusations <- accused_witches %>% 
                       filter(!is.na(Month.of.Accusation)) %>%
                       group_by(Month.of.Accusation.Name) %>%
@@ -105,7 +116,7 @@ ggplot(data = monthly_accusations) +
              geom_col(aes(y = number)) +
              geom_line() +
              labs(title = "Frequency and Cumulative Frequency of Accusations by Month") +
-             theme(axis.text.x = element_text(angle = 45))
+             salem_theme
 
 
  monthly_accusations %>% 
@@ -118,7 +129,7 @@ ggplot(data = monthly_accusations) +
              aes(x = Month.of.Accusation.Name, y = number) +
              geom_col() +
              labs(title = "Pareto Histogram of Accusations by Month") +
-             theme(axis.text.x = element_text(angle = 45))
+             salem_theme
 
 
 monthly_accusations %>% 
@@ -132,7 +143,7 @@ monthly_accusations %>%
              geom_point( ) +
              geom_path(aes(y=pareto_cumulative, group=1), colour="slateblue1", lty=3, size=0.9) +
              labs(title = "Pareto Cumulative Distribution of Accusations by Month")+
-            theme(axis.text.x = element_text(angle = 45))
+             salem_theme
 
 
  monthly_accusations %>% 
@@ -145,8 +156,8 @@ monthly_accusations %>%
              aes(x = Month.of.Accusation.Name, y = number) +
              geom_col() +
              geom_path(aes(y=pareto_cumulative, group=1), colour="slateblue1", lty=3, size=0.9) +
-             labs(title = "Pareto Histogram of Accusations by Month")+
-             theme(axis.text.x = element_text(angle = 45))
+             labs(title = "Pareto Histogram of Accusations by Month") +
+             salem_theme
 
 
 ```
@@ -160,13 +171,14 @@ termed scatterplots but now would be called line graphs.
 Since most accused were not executed (and this is indicated by setting them
 to NA or missing) we'll remove the missing cases from the graph.
 
-```{r}
+```{r fig.width=5}
 ggplot(data = na.omit(accused_witches)) + 
        aes(x = Month.of.Execution.Name) +
        geom_bar() +
        #geom_dotplot(dotsize = .17, method = "histodot", binwidth = 1, fill = "red") +
        labs(title = "Executions by month", x = "Month")  +
-       scale_x_discrete(drop = FALSE)
+       scale_x_discrete(drop = FALSE) +
+       salem_theme
 
 
 table(accused_witches$Month.of.Execution.Name, useNA = "ifany", 
@@ -182,7 +194,7 @@ in a month were not generally of the same people who were accused in that
 month.  To reproduce this, one approach is to again use summarize() to create
 a monthly data set.
 
-```{r}
+```{r fig.width=6}
 
 monthly_accused <- accused_witches %>% 
                       filter(!is.na(Month.of.Accusation)) %>%
@@ -202,10 +214,9 @@ monthly_data <- left_join(monthly_accused, monthly_executed) %>%
 ggplot(monthly_data) +
      aes(x = Month, y = accusations, group =1) +
      geom_path(color = "blue" ) +
-     geom_line(aes(y = executions, x = Month, group=1, color = "red"))
-     labs(title = "Executions and Accusations by Month")+
-     theme(axis.text.x = element_text(angle = 45))
-
+     geom_line(aes(y = executions, x = Month, group=1, color = "red")) +
+     labs(title = "Executions and Accusations by Month") +
+     salem_theme
 ```
 
 
@@ -244,7 +255,7 @@ To make a histogram for each town we can select the town we want. This is
 illustrated below for Andover.
 
 Note that in the data set the white space from the beginning and ending of the
-place names. 
+place names has been removed. 
 
 
 ```{r}
@@ -276,7 +287,7 @@ accused_witches %>% filter(Residence == "Andover") %>%
 
 Alternatively, we can use faceting to show all of the histograms. 
 
-```{r}
+```{r fig.width=6, fig.height=8}
 
 accused_witches %>% 
    ggplot() +
@@ -285,7 +296,9 @@ accused_witches %>%
    geom_vline(xintercept = 6.5, color = "red") +
    scale_x_discrete(drop = FALSE) +
    facet_wrap(facets = vars(Residence), ncol = 4) +
-    theme(axis.text.x = element_text(angle = 90))
+   labs(title = "Number of accusations by month",
+        subtitle = "Red line indicates create of court") +
+   salem_theme
 
 ```
 
@@ -415,4 +428,10 @@ tax_comparison %>% group_by(Year, Petition) %>%
                       sum = sum(Tax), Count = n())
 ```
 
+## Conclusion
 
+This has illustrated how to reproduce the analyses from the Salem Witchcraft 
+Website. The raw data is available at the websie and at 
+[the respoistory for this package](https://github.com/elinw/salem/tree/master/rawdata).
+The code used to transform the original data into the files presented here is
+also available at that location.
