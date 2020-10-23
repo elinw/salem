@@ -258,14 +258,14 @@ Note that in the data set the white space from the beginning and ending of the
 place names has been removed. 
 
 
-```{r}
+```{r fig.width=5}
 
 accused_witches %>% filter(Residence == "Andover") %>%
    ggplot() +
    aes(x = Month.of.Accusation.Name) +
    geom_bar() +
    scale_x_discrete(drop=FALSE) +
-   theme(axis.text.x = element_text(angle = 45))
+   salem_theme
 
 
 ```
@@ -273,7 +273,7 @@ accused_witches %>% filter(Residence == "Andover") %>%
 The website encourages examining the period before and after the convening of the ...
 in June.  To help make this more visible we can add a vline.
 
-```{r}
+```{r fig.width=5}
 
 accused_witches %>% filter(Residence == "Andover") %>%
    ggplot() +
@@ -281,7 +281,7 @@ accused_witches %>% filter(Residence == "Andover") %>%
    geom_bar() +
    geom_vline(xintercept = 6.5, color = "red") +
    scale_x_discrete(drop=FALSE) +
-    theme(axis.text.x = element_text(angle = 45))
+   salem_theme
 
 ```
 
@@ -297,8 +297,9 @@ accused_witches %>%
    scale_x_discrete(drop = FALSE) +
    facet_wrap(facets = vars(Residence), ncol = 4) +
    labs(title = "Number of accusations by month",
-        subtitle = "Red line indicates create of court") +
-   salem_theme
+        subtitle = "Red line indicates reconvening of the Court of Oyer and Terminer",
+        x = "Month of Accusation") +
+   theme(axis.text.x = element_text(angle = 90, vjust = .5))
 
 ```
 
