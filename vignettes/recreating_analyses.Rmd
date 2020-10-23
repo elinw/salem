@@ -1,0 +1,418 @@
+---
+title: "Reproducing the Website Analyses"
+author: ""
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Reproducing the Website Analyses}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(dplyr)
+library(ggplot2)
+library(knitr)
+library(tidyr)
+library(salem)
+```
+
+The [Salem Witchcraft Website](https://www.tulane.edu/~salem/index.html)
+presents a number of data analyses and explains how to reproduce them
+using Excel. This vignette will document how to as closely as possible
+reproduce those analyses using R.  In some cases the analyses will be 
+extended in order to illustrate points in the website text that were
+not easily expressible in Excel. 
+
+While the website has seven data sets, the package has only 6. This is 
+because R makes it relatively simple to manipulate the data and also
+because this organization is more in line with how social scientists would 
+likely create a data set.
+
+As is always true in R, there are many different ways to do the same thing. 
+If you are using this for teaching purposes you will likely want to use
+the approach that most closely matches what you are doing in your course and
+what your goals are for students to work on their own analyses. The focus
+of this document is on use of _ggplot2_ and the base R plotting system. 
+However, even within these major groupings there are many ways to acheive
+the same goals.  
+
+Most of the analyses presented are graphical and so that will be the focus 
+here. However some preprocessing will also be illustrated.
+
+This version does not yet include spatial analysis.
+
+## Ggplot and the Tidyverse
+
+### Accusations.
+
+The website includes displays of the distribution by month.
+
+#### Histogram and frequency table by month
+
+```{r}
+ggplot(data = accused_witches) + 
+       aes(x = Month.of.Accusation.Name) +
+       geom_bar() +
+       #geom_dotplot(dotsize = .17, method = "histodot", binwidth = 1, fill = "red") +
+       labs(title = "Accusations by month", x = "Month")  +
+       scale_x_discrete(drop = FALSE)
+
+table(accused_witches$Month.of.Accusation.Name, useNA = "ifany", 
+      dnn = "Month") %>% kable(caption = "Accusations by Month")
+
+```
+
+
+
+#### Cumulative accusations by month
+```{r}
+ggplot(data = accused_witches) + 
+       aes(x = as.numeric(Month.of.Accusation.Name)) +
+       stat_ecdf(na.rm = TRUE, geom = "line") +
+       labs(title = "Cumulative accusations by month", x = "Month", 
+            y = "Cumulative Accusations")  +
+       scale_x_continuous(breaks = c(1:12), 
+                          labels = c("Jan", "Feb", "Mar", "Apr", "May", 
+                                     "Jun", "Jul","Aug", "Sept", "Oct", "Nov", "Dec") )
+
+
+cumsum(table(accused_witches$Month.of.Accusation.Name)) %>% kable()
+
+```
+
+An alternative approach using dplyr that provides some other options. This approach
+would also let you add other variables to the new monthly data, whether the 
+number of executions or other data you collect. One advantage of this approach
+is that it is easier to create a Pareto Histogram as displayed on the 
+website. These examples show three possible ways to display the Pareto 
+histogram.  As usual there are other approaches. 
+
+```{r message=FALSE}
+monthly_accusations <- accused_witches %>% 
+                      filter(!is.na(Month.of.Accusation)) %>%
+                      group_by(Month.of.Accusation.Name) %>%
+                      summarize(number = n()) %>% 
+                      mutate(cumulative = cumsum(number) )
+monthly_accusations %>% kable(caption = "Accusations by Month")
+
+ggplot(data = monthly_accusations) +
+             aes(x = Month.of.Accusation.Name, y = cumulative, group =1) +
+             geom_col(aes(y = number)) +
+             geom_line() +
+             labs(title = "Frequency and Cumulative Frequency of Accusations by Month") +
+             theme(axis.text.x = element_text(angle = 45))
+
+
+ monthly_accusations %>% 
+             arrange(desc(number))  %>% 
+            mutate(Month.of.Accusation.Name = 
+                   factor(Month.of.Accusation.Name, 
+                         levels=Month.of.Accusation.Name)) %>%
+            mutate(pareto_cumulative = cumsum(number) ) %>%
+        ggplot() +
+             aes(x = Month.of.Accusation.Name, y = number) +
+             geom_col() +
+             labs(title = "Pareto Histogram of Accusations by Month") +
+             theme(axis.text.x = element_text(angle = 45))
+
+
+monthly_accusations %>% 
+             arrange(desc(number))  %>% 
+            mutate(Month.of.Accusation.Name = 
+                   factor(Month.of.Accusation.Name, 
+                         levels=Month.of.Accusation.Name)) %>%
+            mutate(pareto_cumulative = cumsum(number) ) %>%
+        ggplot() +
+             aes(x = Month.of.Accusation.Name, y = pareto_cumulative) +
+             geom_point( ) +
+             geom_path(aes(y=pareto_cumulative, group=1), colour="slateblue1", lty=3, size=0.9) +
+             labs(title = "Pareto Cumulative Distribution of Accusations by Month")+
+            theme(axis.text.x = element_text(angle = 45))
+
+
+ monthly_accusations %>% 
+             arrange(desc(number))  %>% 
+            mutate(Month.of.Accusation.Name = 
+                   factor(Month.of.Accusation.Name, 
+                         levels=Month.of.Accusation.Name)) %>%
+            mutate(pareto_cumulative = cumsum(number) ) %>%
+        ggplot() +
+             aes(x = Month.of.Accusation.Name, y = number) +
+             geom_col() +
+             geom_path(aes(y=pareto_cumulative, group=1), colour="slateblue1", lty=3, size=0.9) +
+             labs(title = "Pareto Histogram of Accusations by Month")+
+             theme(axis.text.x = element_text(angle = 45))
+
+
+```
+
+#### Chronology of Executions
+
+Creating the bar chart of executions over time is similar to creating
+that for accusations.  Additionally, these are shown as what is 
+termed scatterplots but now would be called line graphs.  
+
+Since most accused were not executed (and this is indicated by setting them
+to NA or missing) we'll remove the missing cases from the graph.
+
+```{r}
+ggplot(data = na.omit(accused_witches)) + 
+       aes(x = Month.of.Execution.Name) +
+       geom_bar() +
+       #geom_dotplot(dotsize = .17, method = "histodot", binwidth = 1, fill = "red") +
+       labs(title = "Executions by month", x = "Month")  +
+       scale_x_discrete(drop = FALSE)
+
+
+table(accused_witches$Month.of.Execution.Name, useNA = "ifany", 
+      dnn = "Month") %>% kable(caption = "Executions by Month")
+
+```
+
+There are many ways to explore the relationship between executions and 
+accusations.  On the website this is displayed using overlapping 
+line plots of the number of execuations in a month and the number of 
+accusations.  If teaching, it is important to point out that the execuations
+in a month were not generally of the same people who were accused in that 
+month.  To reproduce this, one approach is to again use summarize() to create
+a monthly data set.
+
+```{r}
+
+monthly_accused <- accused_witches %>% 
+                      filter(!is.na(Month.of.Accusation)) %>%
+                      group_by(Month.of.Accusation.Name) %>%
+                      summarize(accusations = n())  %>%
+                      rename(Month = Month.of.Accusation.Name)
+monthly_executed <- accused_witches %>% 
+                      filter(!is.na(Month.of.Execution)) %>%
+                      group_by(Month.of.Execution.Name) %>%
+                      summarize(executions = n()) %>%
+                      rename(Month = Month.of.Execution.Name)
+monthly_data <- left_join(monthly_accused, monthly_executed) %>%
+                          mutate(executions = 
+                                   ifelse(is.na(executions), 0, executions))
+
+
+ggplot(monthly_data) +
+     aes(x = Month, y = accusations, group =1) +
+     geom_path(color = "blue" ) +
+     geom_line(aes(y = executions, x = Month, group=1, color = "red"))
+     labs(title = "Executions and Accusations by Month")+
+     theme(axis.text.x = element_text(angle = 45))
+
+```
+
+
+
+
+### Geographic Spread of Accusations
+
+The pivot table of month of accusation by town. However that table is huge
+and only the first seven columns are shown on the website. A more compact 
+display is given below rather than using kable().  Also note that 
+the row and column totals are added. 
+
+```{r}
+addmargins(table( accused_witches$Month.of.Accusation.Name, accused_witches$Residence,
+        dnn = c("Month", "Residence") )) 
+```
+
+The site discusses the "grand total" data (the row sum) as reflecting the
+varying intensity in the different towns.  This can also be shown using
+a univariate table (or dplyr::summarize())
+
+```{r}
+table(accused_witches$Residence, dnn = "Residence") %>% 
+  kable(caption = "Residences of Accused")
+
+accused_witches %>% group_by(Residence) %>% summarize(number = n()) %>% 
+     kable(caption = "Residences of Accused")
+
+```
+
+The website contains a towns data set that essentially reproduces the large
+contingency table.  This makes sense to do in Excel, but in R we do not 
+need to makea separate data set. 
+
+To make a histogram for each town we can select the town we want. This is 
+illustrated below for Andover.
+
+Note that in the data set the white space from the beginning and ending of the
+place names. 
+
+
+```{r}
+
+accused_witches %>% filter(Residence == "Andover") %>%
+   ggplot() +
+   aes(x = Month.of.Accusation.Name) +
+   geom_bar() +
+   scale_x_discrete(drop=FALSE) +
+   theme(axis.text.x = element_text(angle = 45))
+
+
+```
+
+The website encourages examining the period before and after the convening of the ...
+in June.  To help make this more visible we can add a vline.
+
+```{r}
+
+accused_witches %>% filter(Residence == "Andover") %>%
+   ggplot() +
+   aes(x = Month.of.Accusation.Name) +
+   geom_bar() +
+   geom_vline(xintercept = 6.5, color = "red") +
+   scale_x_discrete(drop=FALSE) +
+    theme(axis.text.x = element_text(angle = 45))
+
+```
+
+Alternatively, we can use faceting to show all of the histograms. 
+
+```{r}
+
+accused_witches %>% 
+   ggplot() +
+   aes(x = Month.of.Accusation.Name) +
+   geom_bar() +
+   geom_vline(xintercept = 6.5, color = "red") +
+   scale_x_discrete(drop = FALSE) +
+   facet_wrap(facets = vars(Residence), ncol = 4) +
+    theme(axis.text.x = element_text(angle = 90))
+
+```
+
+## Social Conflict
+
+The website explores a variety of dimensions of social conflict in the Salem
+region.  One of the important social cleavages was between those who 
+did or did not support Reverend Parris, who had been appointed as
+the minister for the new church in Salem Village. (This was the Puritan
+church, which was the official church in Massacheusetts.)  
+
+The site has two data sets, one of pro-Parris individuals and one of 
+anti-Parris individuals.  For use in R these have been combined with 
+an added variable identifying the position of the indivual. This data set is
+called parris_social. Also the original column label for the anti-Parris
+data was "[Church] Member" while for the pro-Parris data it was "Church-Member."
+In the parris_social data Church-Member is used. 
+Using the variable `view` it can be subset to pro- and
+anti- groups.  However it is not necessary to do this.
+
+A three-way table can be created, as one example. Two ways of doing this
+are shown.  Marginals and proportions could be added.
+
+
+```{r}
+
+table(parris_social$Sex, parris_social$Identification, parris_social$view,
+      dnn = c("Sex", "Identification", "View"))
+
+ftable(parris_social$Sex, parris_social$Identification, parris_social$view,
+      dnn = c("Sex", "Identification", "View"))
+
+
+```
+
+Treating position on Parris as the dependent varable, we might rearrange the tables.
+
+```{r}
+
+table(parris_social$view, parris_social$Identification, parris_social$Sex, 
+      dnn = c("View", "Identification", "Sex"))
+
+ftable( parris_social$Identification, parris_social$view,  parris_social$Sex,
+      dnn = c("View", "Identification", "Sex"))
+
+
+```
+
+
+The parris_social data set focuses on those who signed pro- and anti-Parris 
+petitions.  In contrast, the salem_village data set includes individuals who did not 
+sign petitions in addition to those who did.  However, it is limited to those who paid
+taxes so many of the young men and women of all ages who are in the parris_social data
+are not included.  This also includes data from multiple years.  
+
+The basic table for this is the analysis of church membership and position on Parris.
+
+```{r}
+table(salem_village$Petition, salem_village$Church.to.1696, 
+      dnn = c( "Membership", "View"))
+
+addmargins( table(salem_village$Petition, salem_village$Church.to.1696, 
+      dnn = c( "Membership", "View")))
+```
+
+#### Political Power
+
+As explained on the website, the Village of Salem was governed by a Committee of 
+Five in addition to the Town Meeting 
+[see Salem Village Politics](https://www.tulane.edu/~salem/Politics%20Intro.html).
+
+The data set that is part of this package called committee_list is 
+structured differently than the original data. It is in "long" format with
+one row per person-year for each committee member for the years they 
+served.   This can be coverted to various other formats if desired.  
+
+You can make a table see how the make up of the committee changed over the period
+from 1687 to 1698.
+
+```{r}
+
+table(committee_list$Petition, committee_list$Year, dnn = c("Petition", "Year"))
+
+```
+
+The website shows a complex pivot table involving three variables.
+
+```{r}
+table( committee_list$Petition, committee_list$Social, committee_list$Year )
+```
+
+One way to explore the association is to cross tabulate the Petition and Social
+variables.  However, this counts the same people multiple times if they served
+for multiple years.
+
+```{r}
+
+table( committee_list$Petition, committee_list$Social )
+
+```
+
+To adjust for this and get the data matching the website
+we need to remove those duplicates. Then the table matches that found at
+[Committee Social Report](https://www.tulane.edu/~salem/Committeemen%20Social%20Report.html).
+
+```{r}
+committee_list2 <-  committee_list %>% group_by(Committee.Members) %>% 
+                             summarize(Social = first(Social), 
+                                       Petition = first(Petition),
+                                       Terms = n())
+
+addmargins(table( committee_list2$Petition, committee_list2$Social ))
+```
+
+
+### Wealth and Salem Village Conflict
+
+The tax_comparison data set is also set up in long format. This can then be
+used to create a comparison table similar to the table on 
+[Tax Comparison](https://www.tulane.edu/~salem/1690%20Tax%20Comparisons.html).
+One limitation is that R does not have a built in function for the mode.
+
+```{r}
+tax_comparison %>% group_by(Year, Petition) %>%
+            summarize(mean = mean(Tax), median = median(Tax), minimum = min(Tax),
+                      maximum =  max(Tax), range = maximum - minimum, 
+                      sum = sum(Tax), Count = n())
+```
+
+

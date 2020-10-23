@@ -4,7 +4,7 @@ author: ""
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Introduction}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -40,6 +40,10 @@ is given here.
  - [A Guide to the On-Line Primary Sources of the Salem Witch Trials](http://www.17thc.us/primarysources/)
  - [Danvers Archival Center](https://www.danverslibrary.org/archive/welcome-to-the-danvers-archival-center-website/)
  - [Famous Trials: Salem Witchcraft Trials (1692)] (https://famous-trials.com/salem)
- - [Salem Witch Trials: Documentary Archive and Transcription Project]([http://salem.lib.virginia.edu/home.html)
+ - [Salem Witch Trials: Documentary Archive and Transcription Project](http://salem.lib.virginia.edu/home.html)
+ 
+ 
+ #### Here are some additional scholarly sources
+ 
  
  
