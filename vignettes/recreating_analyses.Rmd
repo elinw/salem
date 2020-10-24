@@ -422,12 +422,179 @@ used to create a comparison table similar to the table on
 [Tax Comparison](https://www.tulane.edu/~salem/1690%20Tax%20Comparisons.html).
 One limitation is that R does not have a built in function for the mode.
 
+This is the most complex analysis on the website. Complications include
+people moving in and out of the data in different years (individuals appear
+between one and six times), the changing 
+amount of taxes over the time period and name changes. The analysis looks 
+at both group and individual level comparisons and individual level mobility.
+
+
+Here is the distribution of tax payers by year.
+
 ```{r}
+table(tax_comparison$Year, dnn = c("Year")) %>% kable(caption = "Tax payers by year")
+```
+
+The next table summarizes descriptive statistics for all of the years. The
+website general shows one year at a time or in some cases compares two years. 
+You can add `filter(Year = 1681)`
+to display only the 1681 data, changing the filter to select whatever years
+you want. For example to select all of the data for 1681 through 1694 one way
+would be to add `select(Year >= 1691 & Year <= 1694)`.   
+
+Let's start by looking at the group level data.
+
+The first table is for everyone in a year. The second separates the 
+data based on which petition the tax payer signed (or if they) did not sign.
+
+```{r}
+tax_comparison %>% group_by(Year) %>%
+            summarize(mean = round(mean(Tax), 1), median = round(median(Tax), 1),
+                                   minimum = min(Tax),
+                      maximum =  max(Tax), range = maximum - minimum, 
+                      sum = sum(Tax), Count = n()) %>% 
+                      kable(caption = "Taxes paid by year")
+
+
+
 tax_comparison %>% group_by(Year, Petition) %>%
-            summarize(mean = mean(Tax), median = median(Tax), minimum = min(Tax),
+            summarize(mean = round(mean(Tax), 1), median = round(median(Tax), 1),
+                                   minimum = min(Tax),
+                      maximum =  max(Tax), range = maximum - minimum, 
+                      sum = sum(Tax), Tax_payers = n()) %>% 
+                      kable(caption = "Taxes paid by year and petition signed")
+```
+
+To do the analysis comparing the median tax paid for the three groups we can
+graph the values over time.  In this case, we will first make a data set 
+of statistics to work with.
+
+```{r fig.width=4}
+yearly_tax <- tax_comparison %>% group_by(Year, Petition) %>%
+            summarize(mean = round(mean(Tax), 1), median = round(median(Tax), 1),
+                                   minimum = min(Tax),
                       maximum =  max(Tax), range = maximum - minimum, 
                       sum = sum(Tax), Count = n())
+
+ggplot(yearly_tax) + 
+        aes(x = Year, y = median, group = Petition, color = Petition) +
+        geom_line() +
+        labs(title = "Tax paid by petition", y = "Shillings", x = "Year") 
+
 ```
+
+The analysis of annual data on the website specifically focuses on thse who were
+Pro- and Anti- Parris based on petition signatures. As can be seen in the 
+previous graph, those who did not sign petititions always had a lower median
+tax, but the other two groups were inconsistent.  To address this the site
+presents the ratio of the medians of the two group.  A ratio of 1.0 means that
+the median tax for the two groups was identical.  A ratio of great than
+1 means that the Pro-Parris group had a higher median. A ratio of 
+less than one means that the Anti-Parris group had a higher median.
+
+```{r fig.width=5}
+
+ratios <- yearly_tax %>% filter(Petition %in% c("Pro-P", "Anti-P")) %>%
+                   select(Year, Petition, median) %>% 
+                   pivot_wider(id_cols = c(Year), values_from = median, 
+                               names_from = Petition) %>% 
+                    mutate(median_ratio = `Pro-P`/`Anti-P`)
+ratios %>% kable()
+ggplot(ratios, 
+        aes(x = Year, y = median_ratio)) +
+        geom_point() +
+        geom_line(group = 1) +
+        geom_hline(yintercept = 1, color = "blue") +
+        labs(title = "Ratio of Pro- to Anti- Parris median tax",
+             y = "Ratio", x = "Year") 
+
+```
+
+The same analysis can be done but substituting mean for median.
+
+```{r}
+ratios <- yearly_tax %>% filter(Petition %in% c("Pro-P", "Anti-P")) %>%
+                   select(Year, Petition, mean) %>% 
+                   pivot_wider(id_cols = c(Year), values_from = mean, 
+                               names_from = Petition) %>% 
+                    mutate(mean_ratio = `Pro-P`/`Anti-P`)
+ratios %>% kable()
+ggplot(ratios, 
+        aes(x = Year, y = mean_ratio)) +
+        geom_point() +
+        geom_line(group = 1) +
+        geom_hline(yintercept = 1, color = "blue") +
+        labs(title = "Ratio of Pro- to Anti- Parris mean tax",
+             y = "Ratio", x = "Year") 
+```
+
+
+
+The site also looks at individual trajectories using ranks and percentiles 
+within each year, allowing analysis of whether an individual's financial
+position changed substantially over time. Individuals whose percentile changed
+by more than 10 are considered to have moved substantially.
+
+There are many ways to do this, and the method chosen will depend on your 
+purposes. The example below is not necessarily the best or most efficient. 
+To do the analysis we need to obtain the rank and percentile for each
+of the tax amounts within the years.  Finally, we need to compare those. 
+In this example we will focus on the 
+[1681-1690 comparison shown](https://www.tulane.edu/~salem/1681-90%20Rank.html) 
+while providing a framework for the others.
+
+First create a wide data set and calculate ranks and cumulative proportions. 
+This allows viewing and sorting of individuals for specific years.
+
+```{r}
+persisters <- tax_comparison %>% pivot_wider(id_cols = c(Name, Petition),
+                                             names_from = Year,
+                                             names_prefix = "X",
+                                             values_from = Tax
+                                             ) %>%
+                                 relocate(X1681, .before = X1690) 
+
+```
+Next we want to compare our two selected years and determine the number who
+went up, down and stayed the same and how that relates to the petitions.
+This analysis is based on the empirical cumulative relative frequency.
+
+To reproduce the analysis on the website we use the dplyr min_rank function
+(which is equivalent to rank(ties.method = "min") in base R).  This ranks
+all of the tax payments with gaps between the ties.  So if two people 
+are tied for the second rank, the person after them would be ranked fourth.
+Turn the rank into a percentile by subtracting 1 and dividing by the number 
+of tax payers in that year. 
+
+
+```{r}
+
+comparison <- persisters %>% 
+                    mutate(across(starts_with("X"), 
+                                               list(
+                                                    rank = min_rank
+                                                    )
+                                        )) %>%
+                   filter(!is.na(X1690) & !is.na(X1681)) %>%
+                   mutate(
+                         X1690_ptile = 100 * (X1690_rank - 1)/100,
+                         X1681_ptile = 100* (X1681_rank - 1)/94,
+                         compare_1681_1690 =
+                         case_when(
+                          X1690_ptile -X1681_ptile >=  10 ~ "Up",
+                          X1690_ptile -X1681_ptile <= -10 ~ "Down",
+                          TRUE ~ "No Change"
+                        )  
+                    ) 
+
+table(comparison$compare_1681_1690, comparison$Petition, 
+      dnn = c("Change", "Petition")) %>%
+      kable(caption = "Change in position 1681-1690")
+
+
+```
+
+
 
 ## Conclusion
 
