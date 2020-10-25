@@ -1,3 +1,9 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^rawdata$
+^learnr$
+^README\.Rmd$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$

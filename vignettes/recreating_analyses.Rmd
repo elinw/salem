@@ -44,10 +44,10 @@ examples that use the tidyverse for analysis and some that use base R.
 However, even within these major groupings there are many ways to acheive
 the same goals.  
 
-Most of the analyses presented are graphical and so that will be the focus 
+Many of the analyses presented are graphical and so that will be the focus 
 here. However some preprocessing will also be illustrated.
 
-This version does not yet include spatial analysis, but that is on the.
+This version does not yet include spatial analysis, but that is on the roadmap.
 
 For the ggplots this theme is being used in may cases.
 
@@ -188,7 +188,7 @@ table(accused_witches$Month.of.Execution.Name, useNA = "ifany",
 
 There are many ways to explore the relationship between executions and 
 accusations.  On the website this is displayed using overlapping 
-line plots of the number of execuations in a month and the number of 
+line plots of the number of executions in a month and the number of 
 accusations.  If teaching, it is important to point out that the execuations
 in a month were not generally of the same people who were accused in that 
 month.  To reproduce this, one approach is to again use summarize() to create
@@ -212,10 +212,11 @@ monthly_data <- left_join(monthly_accused, monthly_executed) %>%
 
 
 ggplot(monthly_data) +
-     aes(x = Month, y = accusations, group =1) +
-     geom_path(color = "blue" ) +
-     geom_line(aes(y = executions, x = Month, group=1, color = "red")) +
-     labs(title = "Executions and Accusations by Month") +
+     aes(x = Month, y = accusations, group = 1) +
+     geom_path( color = "blue" ) +
+     geom_line(aes(y = executions, x = Month, group = 1), color = "red") +
+     labs(title = "Executions and Accusations by Month",
+          subtitle = "Accusations in blue and executions in red") +
      salem_theme
 ```
 
@@ -270,8 +271,9 @@ accused_witches %>% filter(Residence == "Andover") %>%
 
 ```
 
-The website encourages examining the period before and after the convening of the ...
-in June.  To help make this more visible we can add a vline.
+The website encourages examining the period before and after the convening of 
+the Court of Oyer and Terminer in June.  
+To help make this more visible we can add a vline.
 
 ```{r fig.width=5}
 
@@ -280,7 +282,10 @@ accused_witches %>% filter(Residence == "Andover") %>%
    aes(x = Month.of.Accusation.Name) +
    geom_bar() +
    geom_vline(xintercept = 6.5, color = "red") +
-   scale_x_discrete(drop=FALSE) +
+   scale_x_discrete(drop = FALSE) +
+  labs(title = "Accusations by Month", 
+       subtitle = "Red line indicates reconvening of the Court of Oyer and Terminer",
+       x = "Month of accusation") +
    salem_theme
 
 ```
@@ -310,6 +315,8 @@ region.  One of the important social cleavages was between those who
 did or did not support Reverend Parris, who had been appointed as
 the minister for the new church in Salem Village. (This was the Puritan
 church, which was the official church in Massacheusetts.)  
+
+
 
 The site has two data sets, one of pro-Parris individuals and one of 
 anti-Parris individuals.  For use in R these have been combined with 
@@ -469,7 +476,7 @@ To do the analysis comparing the median tax paid for the three groups we can
 graph the values over time.  In this case, we will first make a data set 
 of statistics to work with.
 
-```{r fig.width=4}
+```{r fig.width=5}
 yearly_tax <- tax_comparison %>% group_by(Year, Petition) %>%
             summarize(mean = round(mean(Tax), 1), median = round(median(Tax), 1),
                                    minimum = min(Tax),
@@ -600,6 +607,7 @@ table(comparison$compare_1681_1690, comparison$Petition,
 
 This has illustrated how to reproduce the analyses from the Salem Witchcraft 
 Website. The raw data is available at the websie and at 
-[the respoistory for this package](https://github.com/elinw/salem/tree/master/rawdata).
+[the respository for this package](https://github.com/elinw/salem/tree/master/rawdata).
 The code used to transform the original data into the files presented here is
 also available at that location.
+
