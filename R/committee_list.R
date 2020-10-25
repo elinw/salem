@@ -12,5 +12,5 @@
 #'   \item{Sort}{ID from original data set}
 #'   \item{Year}{Year of membership}
 #' }
-#' @source \url{https://www.tulane.edu/~salem}
+#' @source \url{https://www.tulane.edu/~salem/Committee%20List%20Data%20Set.html}
 "committee_list"

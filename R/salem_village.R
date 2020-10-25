@@ -2,7 +2,7 @@
 #'
 #' A dataset containing tax list of everyone who appeared on
 #' the tax assessment rolls for 1690, 1695, and 1697. This is a "a good, though
-#' imperfect, indicator of the village's adult male population plus some widows
+#' imperfect, indicator of the village's adult male population" plus some widows
 #' (and excluding young men who were not independent).
 #'
 #' May be merged with the tax_comparison data set based on name matching,
@@ -15,5 +15,5 @@
 #'   \item{Church.to.1696}{Was the person a member of any church through 1696}
 #'   \item{Sort}{ID from original data set}
 #' }
-#' @source \url{https://www.tulane.edu/~salem}
+#' @source \url{https://www.tulane.edu/~salem/Salem%20Village%20Data%20Set.html}
 "salem_village"

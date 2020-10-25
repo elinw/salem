@@ -11,5 +11,5 @@
 #'   \item{Identification}{The social position of the individual (five groups)}
 #'   \item{Sort}{ID from original data set}
 #' }
-#' @source \url{https://www.tulane.edu/~salem}
+#' @source \url{https://www.tulane.edu/~salem/Pro-Parris%20Data%20Set.html}
 "parris_social"
