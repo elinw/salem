@@ -1,0 +1,8 @@
+pandoc: 1.19.2.1
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles:
+  introduction: introduction.html
+  recreating_analyses: recreating_analyses.html
+last_built: 2020-10-24T23:53Z
+
