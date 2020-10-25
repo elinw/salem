@@ -5,7 +5,7 @@
 #'
 #' @format A data frame with 189 rows and 5 variables:
 #' \describe{
-#'   \item{Name}{Name of the individuar}
+#'   \item{Name}{Name of the individual}
 #'   \item{view}{Stance on Parris}
 #'   \item{Sex}{Sex of the individual}
 #'   \item{Identification}{The social position of the individual (five groups)}

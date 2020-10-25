@@ -5,7 +5,7 @@
 \alias{accused_witches}
 \title{Accused witches}
 \format{
-A data frame with 152 rows and 5 variables:
+A data frame with 152 rows and 8 variables:
 \describe{
 \item{Accused.Witch}{Name of accused}
 \item{Residence}{Town of residence}

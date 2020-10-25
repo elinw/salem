@@ -3,9 +3,9 @@
 \docType{data}
 \name{tax_comparison}
 \alias{tax_comparison}
-\title{Tax list data fo Salem}
+\title{Tax list data for Salem}
 \format{
-A data frame with 200 rows and 9 variables:
+A data frame with 200 rows and 5 variables:
 \describe{
 \item{Name}{Name of the tax payer}
 \item{Petition}{Stance on Petition}
@@ -25,5 +25,8 @@ A dataset containing tax list data for Salem, MA, 1681-1700.
 Payments are in shillings (converted from original records).
 Petition refers to Pro-Parris, Anti-Parris and No Signature.
 Data are in long format with one record per person per year.
+May be merged with the tax_comparison data set based on name matching,
+but care should be taken to review and make judgements about matching. This
+data includes more years of tax records than salem_village.
 }
 \keyword{datasets}
