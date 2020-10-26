@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 <!-- badges: end -->
-<img src='https://github.com/elinw/salem/vignettes/images/salemhex.png'
+<img src='https://github.com/elinw/salem/blob/master/vignettes/images/salemhex.png'
 align="right" height="139" /></a>
 
 The goal of salem is to provide access to data and other materials related to
