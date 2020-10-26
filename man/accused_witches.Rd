@@ -18,7 +18,7 @@ A data frame with 152 rows and 8 variables:
 }
 }
 \source{
-\url{https://www.tulane.edu/~salem}
+\url{https://www.tulane.edu/~salem/Accused\%20Witches.html}
 }
 \usage{
 accused_witches

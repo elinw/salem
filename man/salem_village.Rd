@@ -14,7 +14,7 @@ A data frame with 137 rows and 5 variables:
 }
 }
 \source{
-\url{https://www.tulane.edu/~salem}
+\url{https://www.tulane.edu/~salem/Salem\%20Village\%20Data\%20Set.html}
 }
 \usage{
 salem_village
@@ -22,7 +22,7 @@ salem_village
 \description{
 A dataset containing tax list of everyone who appeared on
 the tax assessment rolls for 1690, 1695, and 1697. This is a "a good, though
-imperfect, indicator of the village's adult male population plus some widows
+imperfect, indicator of the village's adult male population" plus some widows
 (and excluding young men who were not independent).
 }
 \details{

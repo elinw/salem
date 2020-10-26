@@ -15,7 +15,7 @@ A data frame with 189 rows and 5 variables:
 }
 }
 \source{
-\url{https://www.tulane.edu/~salem}
+\url{https://www.tulane.edu/~salem/Pro-Parris\%20Data\%20Set.html}
 }
 \usage{
 parris_social
