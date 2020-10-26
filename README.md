@@ -1,10 +1,13 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-salem
+Salem
 =====
 
 <!-- badges: start -->
 <!-- badges: end -->
+<img src='vignettes/images/salemhex.png'
+align="right" height="139" /></a>
+
 The goal of salem is to provide access to data and other materials related to the Salem Witchcraft Trials which took place in Salem, Massachusetts and the surrounding region in 1692. It is based on the work of historian Richard Latner which is available at [The Salem Witchcraft Site](https://www.tulane.edu/~salem/).
 
 Installation
