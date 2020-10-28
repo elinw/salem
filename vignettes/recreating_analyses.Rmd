@@ -308,6 +308,67 @@ accused_witches %>%
 
 ```
 
+### Maps
+
+We can use maps to represent the geographic distribution over time 
+spatially.  The salem_region data set is an sf (simple features) data 
+set that provides geographic data for the towns in the three Massachuessets 
+counties represented in our data.  Not all of the towns in these three counties
+had accusations: the majority did not. The data also include the total
+accused for each town and the monthly accused for the towns that ever had an 
+accusation. However, these figures should _never_ be used outside of maps. 
+This is because many towns have multiple records. This is especially true if 
+they include islands, which is common in this region of the state. 
+These are based on modern municipal boundaries which are close to
+but not the same as the historical ones. There are many geographic analyses
+that can be done. Below a comparison of the distribution of whether towns
+had at least on accusation in each of four months
+is given.
+
+First, create variables indicating whether towns did or did not have 
+an accusation in a month and remove the TOWN_LABELs for all the towns that never
+had an accusation.
+
+```{r}
+
+newdata <- salem_region %>% mutate(February.Any = February > 0, March.Any = March > 0,
+                                   April.Any = April > 0, May.Any = May > 0,
+                                   June.Any = June > 0, July.Any = July > 0,
+                                   August.Any = August > 0, 
+                                   September.Any = September >0,
+                                   October.Any = October > 0,
+                                   November.Any = November > 0)
+
+newdata$TOWN_LABEL <- ifelse(newdata$n_accused == 0, NA,  newdata$TOWN_LABEL)
+```
+
+```{r fig.width=8}
+p1 <- ggplot(newdata) 
+p2 <- geom_sf_text(aes(label = TOWN_LABEL), color = "blue", size = 2, nudge_x = 5,
+                nudge_y = 5, na.rm = TRUE) 
+p3 <-       scale_fill_manual(values = c( "grey", "red"), na.value = "white") 
+
+p1  + geom_sf(data = newdata,  aes(fill = February.Any), color = "black") +
+  p3 + p2 + labs(title = "Location of Accusations in February") 
+
+p1 +  geom_sf(data = newdata,  aes(fill = July.Any), color = "black") +
+  p3 + p2 + labs(title = "Location of Accusations in July") 
+
+
+p1 + geom_sf(data = newdata,  aes(fill = August.Any), color = "black") +
+  p3 + p2  + labs(title = "Location of Accusations in August") 
+
+p1 + geom_sf(data = newdata,  aes(fill = November.Any), color = "black") +
+  p3 + p2 + labs(title = "Location of Accusations in November") 
+
+```
+
+
+
+
+
+
+
 ## Social Conflict
 
 The website explores a variety of dimensions of social conflict in the Salem
