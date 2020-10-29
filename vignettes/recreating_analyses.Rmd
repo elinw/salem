@@ -38,11 +38,12 @@ As is always true in R, there are many different ways to do the same thing.
 If you are using this for teaching purposes you will likely want to use
 the approach that most closely matches what you are doing in your course and
 what your goals are for students to work on their own analyses. The focus
-of this document is on use of _ggplot2_ for graphing and in a subsequent iteration
+of this document is on use of _ggplot2_ for graphing and in subsequent iterations
 will also illustrate use of the base R plotting system. There are some 
 examples that use the tidyverse for analysis and some that use base R. 
 However, even within these major groupings there are many ways to acheive
-the same goals.  
+the same goals. We have aimed to present ways to do this that 
+are relatively accessible to people who have not used R extensively. 
 
 Many of the analyses presented are graphical and so that will be the focus 
 here. However some preprocessing will also be illustrated.
@@ -58,7 +59,7 @@ salem_theme <-  theme(axis.text.x = element_text(angle = 45, vjust = .5))
 
 ## Ggplot and the Tidyverse
 
-### Accusations.
+### Accusations
 
 The website includes displays of the distribution by month.
 
@@ -342,23 +343,23 @@ newdata <- salem_region %>% mutate(February.Any = February > 0, March.Any = Marc
 newdata$TOWN_LABEL <- ifelse(newdata$n_accused == 0, NA,  newdata$TOWN_LABEL)
 ```
 
-```{r fig.width=8}
+```{r fig.width=8, fig.height=8}
 p1 <- ggplot(newdata) 
 p2 <- geom_sf_text(aes(label = TOWN_LABEL), color = "blue", size = 2, nudge_x = 5,
                 nudge_y = 5, na.rm = TRUE) 
 p3 <-       scale_fill_manual(values = c( "grey", "red"), na.value = "white") 
 
-p1  + geom_sf(data = newdata,  aes(fill = February.Any), color = "black") +
+p1  + geom_sf(data = newdata,  aes(fill = February.Any), color = "black", size = .1) +
   p3 + p2 + labs(title = "Location of Accusations in February") 
 
-p1 +  geom_sf(data = newdata,  aes(fill = July.Any), color = "black") +
+p1 +  geom_sf(data = newdata,  aes(fill = July.Any), color = "black", size = .1) +
   p3 + p2 + labs(title = "Location of Accusations in July") 
 
 
-p1 + geom_sf(data = newdata,  aes(fill = August.Any), color = "black") +
+p1 + geom_sf(data = newdata,  aes(fill = August.Any), color = "black", size = .1) +
   p3 + p2  + labs(title = "Location of Accusations in August") 
 
-p1 + geom_sf(data = newdata,  aes(fill = November.Any), color = "black") +
+p1 + geom_sf(data = newdata,  aes(fill = November.Any), color = "black", size = .1) +
   p3 + p2 + labs(title = "Location of Accusations in November") 
 
 ```
