@@ -79,4 +79,67 @@ tax_comparison <- tax_comparison %>%
 
 save(tax_comparison, file = "data/tax_comparison.rda")
 
+# This section describes how the map file was created. However the raw data
+# is not included in the package. This should be downloaded from
+# https://docs.digital.mass.gov/dataset/massgis-data-community-boundaries-towns-survey-points
+# using the TOWNSURVEYPOLY data.
+# The sf package is required.
+library(sf)
+library(dplyr)
+MA_towns <-st_read("rawdata/towns/townssurvey_shp/townsurvey_poly/TOWNSSURVEY_POLY.shp")
+# Select just the three counties with towns in the other data sets.
+# Note that towns in present day Maine wil not be mapped here.
+salem_region <- MA_towns %>% dplyr::filter(FIPS_STCO %in% c(25009, 25017, 25025))
+# We need to do this because of an issue in the shape file.
+salem_region <- sf::st_buffer(salem_region, dist = 0)
+#change Danvers to "SALEM VLLAGE" and Salem to "SALEM TOWN to match
+# the other data sets.
+salem_region$TOWN[salem_region$TOWN == "DANVERS"] <- "SALEM VILLAGE"
+salem_region$TOWN[salem_region$TOWN == "SALEM"] <- "SALEM TOWN"
+
+accused_towns <- accused_witches %>%
+  mutate(TOWN = toupper(Residence)) %>%
+  group_by(TOWN) %>%
+  summarize(n_accused = n())
+
+# Add the total number accused to each town
+salem_region <- merge(salem_region, accused_towns, by = "TOWN", all = TRUE)
+
+# Add the total number of accused by month.
+accused_town_monthly <- accused_witches %>%
+  tidyr::pivot_wider(id_cols = c(Accused.Witch, Residence),
+                     names_from = Month.of.Accusation.Name,
+                     values_from = Month.of.Accusation.Name) %>%
+  mutate(TOWN = toupper(Residence)) %>%
+  group_by(TOWN) %>%
+  summarize(
+    February = sum(!is.na(February)),
+    March = sum(!is.na(March)),
+    April = sum(!is.na(April)),
+    May = sum(!is.na(May)),
+    June = sum(!is.na(June)),
+    July = sum(!is.na(July)),
+    August = sum(!is.na(August)),
+    September = sum(!is.na(September)),
+    October = sum(!is.na(October)),
+    November = sum(!is.na(November))
+  )
+salem_region <- merge(salem_region, accused_town_monthly,
+                      by = "TOWN", all = TRUE)
+
+# Many towns have more than one row. This code creates a
+# TOWN_LABEL variable that is assigned to the largest area represented
+# in the records for the town.
+salem_region_max <- as.data.frame(salem_region) %>% group_by(TOWN)  %>%
+  summarize(max_sqm = max(SQUARE_MIL))
+
+salem_region <- merge(salem_region, salem_region_max, by = "TOWN", all = TRUE)
+salem_region$TOWN_LABEL <- ifelse(salem_region$SQUARE_MIL != salem_region$max_sqm,
+                                  "",
+                                  salem_region$TOWN
+)
+
+# Drop the twentieth century data
+salem_region <- salem_region %>% select(-starts_with("POP"), -max_sqm)
+save(salem_region, file = "data/salem_region.rda")
 

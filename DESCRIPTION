@@ -31,9 +31,8 @@ Imports: ggplot2,
          tidyr
 Suggests:
     knitr,
-    learnr,
     rmarkdown,
-    testthat (>= 2.0.0)
+    sf
 VignetteBuilder: 
     knitr
 Roxygen: list(markdown = TRUE)
@@ -44,3 +43,4 @@ Collate:
     "salem_village.R"
     "tax_comparison.R"
     "parris_social.R"
+    "salem_region.R"
