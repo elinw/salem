@@ -97,7 +97,7 @@
     
 <p>The <a href="https://www.tulane.edu/~salem/index.html">Salem Witchcraft Website</a> presents a number of data analyses and explains how to reproduce them using Excel. This vignette will document how to as closely as possible reproduce those analyses using R. In some cases the analyses will be extended in order to illustrate points in the website text that were not easily expressible in Excel.</p>
 <p>While the website has seven data sets, the package has only 5. This is because R makes it relatively simple to manipulate the data and also because this organization is more in line with how social scientists would likely create a data set today.</p>
-<p>As is always true in R, there are many different ways to do the same thing. If you are using this for teaching purposes you will likely want to use the approach that most closely matches what you are doing in your course and what your goals are for students to work on their own analyses. The focus of this document is on use of <em>ggplot2</em> for graphing and in a subsequent iteration will also illustrate use of the base R plotting system. There are some examples that use the tidyverse for analysis and some that use base R. However, even within these major groupings there are many ways to acheive the same goals.</p>
+<p>As is always true in R, there are many different ways to do the same thing. If you are using this for teaching purposes you will likely want to use the approach that most closely matches what you are doing in your course and what your goals are for students to work on their own analyses. The focus of this document is on use of <em>ggplot2</em> for graphing and in subsequent iterations will also illustrate use of the base R plotting system. There are some examples that use the tidyverse for analysis and some that use base R. However, even within these major groupings there are many ways to acheive the same goals. We have aimed to present ways to do this that are relatively accessible to people who have not used R extensively.</p>
 <p>Many of the analyses presented are graphical and so that will be the focus here. However some preprocessing will also be illustrated.</p>
 <p>This version does not yet include spatial analysis, but that is on the roadmap.</p>
 <p>For the ggplots this theme is being used in may cases.</p>
@@ -106,9 +106,9 @@
 <div id="ggplot-and-the-tidyverse" class="section level2">
 <h2 class="hasAnchor">
 <a href="#ggplot-and-the-tidyverse" class="anchor"></a>Ggplot and the Tidyverse</h2>
-<div id="accusations-" class="section level3">
+<div id="accusations" class="section level3">
 <h3 class="hasAnchor">
-<a href="#accusations-" class="anchor"></a>Accusations.</h3>
+<a href="#accusations" class="anchor"></a>Accusations</h3>
 <p>The website includes displays of the distribution by month.</p>
 <div id="histogram-and-frequency-table-by-month" class="section level4">
 <h4 class="hasAnchor">
@@ -844,23 +844,23 @@ To help make this more visible we can add a vline.</p>
                 nudge_y <span class="op">=</span> <span class="fl">5</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> 
 <span class="va">p3</span> <span class="op">&lt;-</span>       <span class="fu">scale_fill_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="st">"grey"</span>, <span class="st">"red"</span><span class="op">)</span>, na.value <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span> 
 
-<span class="va">p1</span>  <span class="op">+</span> <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">newdata</span>,  <span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">February.Any</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span>
+<span class="va">p1</span>  <span class="op">+</span> <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">newdata</span>,  <span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">February.Any</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"black"</span>, size <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span>
   <span class="va">p3</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Location of Accusations in February"</span><span class="op">)</span> </pre></div>
 <p><img src="recreating_analyses_files/figure-html/unnamed-chunk-13-1.png" width="768"></p>
 <div class="sourceCode" id="cb22"><pre class="downlit">
 
-<span class="va">p1</span> <span class="op">+</span>  <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">newdata</span>,  <span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">July.Any</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span>
+<span class="va">p1</span> <span class="op">+</span>  <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">newdata</span>,  <span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">July.Any</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"black"</span>, size <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span>
   <span class="va">p3</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Location of Accusations in July"</span><span class="op">)</span> </pre></div>
 <p><img src="recreating_analyses_files/figure-html/unnamed-chunk-13-2.png" width="768"></p>
 <div class="sourceCode" id="cb23"><pre class="downlit">
 
 
-<span class="va">p1</span> <span class="op">+</span> <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">newdata</span>,  <span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">August.Any</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span>
+<span class="va">p1</span> <span class="op">+</span> <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">newdata</span>,  <span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">August.Any</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"black"</span>, size <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span>
   <span class="va">p3</span> <span class="op">+</span> <span class="va">p2</span>  <span class="op">+</span> <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Location of Accusations in August"</span><span class="op">)</span> </pre></div>
 <p><img src="recreating_analyses_files/figure-html/unnamed-chunk-13-3.png" width="768"></p>
 <div class="sourceCode" id="cb24"><pre class="downlit">
 
-<span class="va">p1</span> <span class="op">+</span> <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">newdata</span>,  <span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">November.Any</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span>
+<span class="va">p1</span> <span class="op">+</span> <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">newdata</span>,  <span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">November.Any</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"black"</span>, size <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span>
   <span class="va">p3</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Location of Accusations in November"</span><span class="op">)</span> </pre></div>
 <p><img src="recreating_analyses_files/figure-html/unnamed-chunk-13-4.png" width="768"></p>
 </div>
