@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • salem</title>
+<title>Simple Features data for Salem — salem_region • salem</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -48,7 +48,16 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Simple Features data for Salem — salem_region" />
+<meta property="og:description" content="A dataset containing map information for the three counties
+represented in the accused_witches data set (not including present-day
+Maine locations) in simple features format. It also includes associated
+data on accusations. This data should never be used to analyze accusations.
+The data is based on modern town boundaries from the Massachuessetts
+Document Repository.  Some simple cleaning has been done to facilitate
+basic mapping. Specifically, the names Salem Town and Salem Village are used
+rather than the modern Salem and Danvers. Additionally, a field, TOWN_LABEL
+is attached to the largest area for each town or community." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -68,7 +77,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -125,72 +134,72 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Simple Features data for Salem</h1>
+    
+    <div class="hidden name"><code>salem_region.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>A dataset containing map information for the three counties
+represented in the accused_witches data set (not including present-day
+Maine locations) in simple features format. It also includes associated
+data on accusations. This data should <em>never</em> be used to analyze accusations.
+The data is based on modern town boundaries from the Massachuessetts
+Document Repository.  Some simple cleaning has been done to facilitate
+basic mapping. Specifically, the names Salem Town and Salem Village are used
+rather than the modern Salem and Danvers. Additionally, a field, TOWN_LABEL
+is attached to the largest area for each town or community.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='va'>salem_region</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="accused_witches.html">accused_witches</a></code> </p>
-        </td>
-        <td><p>Accused witches</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="committee_list.html">committee_list</a></code> </p>
-        </td>
-        <td><p>Committee list</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="parris_social.html">parris_social</a></code> </p>
-        </td>
-        <td><p>The social positions of pro-Parris and anti-Parris individuals</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="salem_region.html">salem_region</a></code> </p>
-        </td>
-        <td><p>Simple Features data for Salem</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="salem_village.html">salem_village</a></code> </p>
-        </td>
-        <td><p>Salem village</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tax_comparison.html">tax_comparison</a></code> </p>
-        </td>
-        <td><p>Tax list data for Salem</p></td>
-      </tr>
-    </tbody>
-    </table>
+
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+
+    <p>A data frame with 437 rows and 28 variables:</p><dl>
+<dt>TOWN</dt><dd><p>Name of town in upper case letters</p></dd>
+<dt>TOWN_ID</dt><dd><p>ID of town</p></dd>
+<dt>TYPE</dt><dd><p>Type of municipality C = City or T = Town</p></dd>
+<dt>ISLAND</dt><dd><p>Indicator for islands. Note that many towns have multiple polygons</p></dd>
+<dt>COASTAL_PO</dt><dd><p>YES for ocean polygon within town limits, NO otherwise</p></dd>
+<dt>FOURCOLOR</dt><dd><p>Codes allowing shading of all towns with 4 symbols</p></dd>
+<dt>FIPS_STCO</dt><dd><p>FIPS for state  and county</p></dd>
+<dt>CCD_MCD</dt><dd><p>US Census town code</p></dd>
+<dt>FIPS_PLACE</dt><dd><p>FIPS town code</p></dd>
+<dt>FIPS_MCD</dt><dd><p>FIPS State &amp; County &amp; Census Town Code concatenated</p></dd>
+<dt>FIPS_COUNT</dt><dd><p>FIPS County</p></dd>
+<dt>ACRES</dt><dd><p>Area in acres</p></dd>
+<dt>SQUARE_MIL</dt><dd><p>Area in square miles</p></dd>
+<dt>SHAPE_Leng</dt><dd><p>The perimeter in meters</p></dd>
+<dt>SHAPE_Area</dt><dd><p>The polygon area in square meters</p></dd>
+<dt>n_accused</dt><dd><p>Total accused</p></dd>
+<dt>February</dt><dd><p>Number accused in February</p></dd>
+<dt>March</dt><dd><p>Number accused in March</p></dd>
+<dt>April</dt><dd><p>Number accused in April</p></dd>
+<dt>May</dt><dd><p>Number accused in May</p></dd>
+<dt>June</dt><dd><p>Number accused in June</p></dd>
+<dt>July</dt><dd><p>Number accused in July</p></dd>
+<dt>August</dt><dd><p>Number accused in August</p></dd>
+<dt>September</dt><dd><p>Number accused in September</p></dd>
+<dt>October</dt><dd><p>Number accused in October</p></dd>
+<dt>November</dt><dd><p>Number accused in November</p></dd>
+<dt>TOWN_LABEL</dt><dd><p>Town name to be used for labelling</p></dd>
+<dt>geometry</dt><dd><p>Simple Features geometry</p></dd>
+
+</dl>
+
+    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
+
+    <p><a href='https://docs.digital.mass.gov/dataset/massgis-data-community-boundaries-towns-survey-points'>https://docs.digital.mass.gov/dataset/massgis-data-community-boundaries-towns-survey-points</a></p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Complex analyses require the sf package, but simple mapping can be
+done using ggplot2.</p>
+<p>FIPS refers to the Federal Information Processing Standard</p>
+
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>

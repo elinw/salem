@@ -86,7 +86,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Reproducing the Website Analyses</h1>
             
-            <h4 class="date">2020-10-27</h4>
+            <h4 class="date">2020-10-29</h4>
       
       
       <div class="hidden name"><code>recreating_analyses.Rmd</code></div>
@@ -822,6 +822,48 @@ To help make this more visible we can add a vline.</p>
    <span class="fu">theme</span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, vjust <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span><span class="op">)</span></pre></div>
 <p><img src="recreating_analyses_files/figure-html/unnamed-chunk-11-1.png" width="576"></p>
 </div>
+<div id="maps" class="section level3">
+<h3 class="hasAnchor">
+<a href="#maps" class="anchor"></a>Maps</h3>
+<p>We can use maps to represent the geographic distribution over time spatially. The salem_region data set is an sf (simple features) data set that provides geographic data for the towns in the three Massachuessets counties represented in our data. Not all of the towns in these three counties had accusations: the majority did not. The data also include the total accused for each town and the monthly accused for the towns that ever had an accusation. However, these figures should <em>never</em> be used outside of maps. This is because many towns have multiple records. This is especially true if they include islands, which is common in this region of the state. These are based on modern municipal boundaries which are close to but not the same as the historical ones. There are many geographic analyses that can be done. Below a comparison of the distribution of whether towns had at least on accusation in each of four months is given.</p>
+<p>First, create variables indicating whether towns did or did not have an accusation in a month and remove the TOWN_LABELs for all the towns that never had an accusation.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit">
+
+<span class="va">newdata</span> <span class="op">&lt;-</span> <span class="va">salem_region</span> <span class="op">%&gt;%</span> <span class="fu">mutate</span><span class="op">(</span>February.Any <span class="op">=</span> <span class="va">February</span> <span class="op">&gt;</span> <span class="fl">0</span>, March.Any <span class="op">=</span> <span class="va">March</span> <span class="op">&gt;</span> <span class="fl">0</span>,
+                                   April.Any <span class="op">=</span> <span class="va">April</span> <span class="op">&gt;</span> <span class="fl">0</span>, May.Any <span class="op">=</span> <span class="va">May</span> <span class="op">&gt;</span> <span class="fl">0</span>,
+                                   June.Any <span class="op">=</span> <span class="va">June</span> <span class="op">&gt;</span> <span class="fl">0</span>, July.Any <span class="op">=</span> <span class="va">July</span> <span class="op">&gt;</span> <span class="fl">0</span>,
+                                   August.Any <span class="op">=</span> <span class="va">August</span> <span class="op">&gt;</span> <span class="fl">0</span>, 
+                                   September.Any <span class="op">=</span> <span class="va">September</span> <span class="op">&gt;</span><span class="fl">0</span>,
+                                   October.Any <span class="op">=</span> <span class="va">October</span> <span class="op">&gt;</span> <span class="fl">0</span>,
+                                   November.Any <span class="op">=</span> <span class="va">November</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>
+
+<span class="va">newdata</span><span class="op">$</span><span class="va">TOWN_LABEL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">newdata</span><span class="op">$</span><span class="va">n_accused</span> <span class="op">==</span> <span class="fl">0</span>, <span class="cn">NA</span>,  <span class="va">newdata</span><span class="op">$</span><span class="va">TOWN_LABEL</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit">
+<span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">newdata</span><span class="op">)</span> 
+<span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">geom_sf_text</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>label <span class="op">=</span> <span class="va">TOWN_LABEL</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"blue"</span>, size <span class="op">=</span> <span class="fl">2</span>, nudge_x <span class="op">=</span> <span class="fl">5</span>,
+                nudge_y <span class="op">=</span> <span class="fl">5</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> 
+<span class="va">p3</span> <span class="op">&lt;-</span>       <span class="fu">scale_fill_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="st">"grey"</span>, <span class="st">"red"</span><span class="op">)</span>, na.value <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span> 
+
+<span class="va">p1</span>  <span class="op">+</span> <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">newdata</span>,  <span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">February.Any</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="va">p3</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Location of Accusations in February"</span><span class="op">)</span> </pre></div>
+<p><img src="recreating_analyses_files/figure-html/unnamed-chunk-13-1.png" width="768"></p>
+<div class="sourceCode" id="cb22"><pre class="downlit">
+
+<span class="va">p1</span> <span class="op">+</span>  <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">newdata</span>,  <span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">July.Any</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="va">p3</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Location of Accusations in July"</span><span class="op">)</span> </pre></div>
+<p><img src="recreating_analyses_files/figure-html/unnamed-chunk-13-2.png" width="768"></p>
+<div class="sourceCode" id="cb23"><pre class="downlit">
+
+
+<span class="va">p1</span> <span class="op">+</span> <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">newdata</span>,  <span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">August.Any</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="va">p3</span> <span class="op">+</span> <span class="va">p2</span>  <span class="op">+</span> <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Location of Accusations in August"</span><span class="op">)</span> </pre></div>
+<p><img src="recreating_analyses_files/figure-html/unnamed-chunk-13-3.png" width="768"></p>
+<div class="sourceCode" id="cb24"><pre class="downlit">
+
+<span class="va">p1</span> <span class="op">+</span> <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">newdata</span>,  <span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">November.Any</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="va">p3</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Location of Accusations in November"</span><span class="op">)</span> </pre></div>
+<p><img src="recreating_analyses_files/figure-html/unnamed-chunk-13-4.png" width="768"></p>
+</div>
 </div>
 <div id="social-conflict" class="section level2">
 <h2 class="hasAnchor">
@@ -829,7 +871,7 @@ To help make this more visible we can add a vline.</p>
 <p>The website explores a variety of dimensions of social conflict in the Salem region. One of the important social cleavages was between those who did or did not support Reverend Parris, who had been appointed as the minister for the new church in Salem Village. (This was the Puritan church, which was the official church in Massacheusetts.)</p>
 <p>The site has two data sets, one of pro-Parris individuals and one of anti-Parris individuals. For use in R these have been combined with an added variable identifying the position of the indivual. This data set is called parris_social. Also the original column label for the anti-Parris data was “[Church] Member” while for the pro-Parris data it was “Church-Member.” In the parris_social data Church-Member is used. Using the variable <code>view</code> it can be subset to pro- and anti- groups. However it is not necessary to do this.</p>
 <p>A three-way table can be created, as one example. Two ways of doing this are shown. Marginals and proportions could be added.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit">
+<div class="sourceCode" id="cb25"><pre class="downlit">
 
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">parris_social</span><span class="op">$</span><span class="va">Sex</span>, <span class="va">parris_social</span><span class="op">$</span><span class="va">Identification</span>, <span class="va">parris_social</span><span class="op">$</span><span class="va">view</span>,
       dnn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Sex"</span>, <span class="st">"Identification"</span>, <span class="st">"View"</span><span class="op">)</span><span class="op">)</span>
@@ -862,7 +904,7 @@ To help make this more visible we can add a vline.</p>
 <span class="co">#&gt;     Non-Member                             0          0</span>
 <span class="co">#&gt;     Young men. 16 years old               17          0</span></pre></div>
 <p>Treating position on Parris as the dependent varable, we might rearrange the tables.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit">
+<div class="sourceCode" id="cb26"><pre class="downlit">
 
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">parris_social</span><span class="op">$</span><span class="va">view</span>, <span class="va">parris_social</span><span class="op">$</span><span class="va">Identification</span>, <span class="va">parris_social</span><span class="op">$</span><span class="va">Sex</span>, 
       dnn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"View"</span>, <span class="st">"Identification"</span>, <span class="st">"Sex"</span><span class="op">)</span><span class="op">)</span>
@@ -904,7 +946,7 @@ To help make this more visible we can add a vline.</p>
 <span class="co">#&gt;                         Pro-Parris          0  0</span></pre></div>
 <p>The parris_social data set focuses on those who signed pro- and anti-Parris petitions. In contrast, the salem_village data set includes individuals who did not sign petitions in addition to those who did. However, it is limited to those who paid taxes so many of the young men and women of all ages who are in the parris_social data are not included. This also includes data from multiple years.</p>
 <p>The basic table for this is the analysis of church membership and position on Parris.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit">
+<div class="sourceCode" id="cb27"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">salem_village</span><span class="op">$</span><span class="va">Petition</span>, <span class="va">salem_village</span><span class="op">$</span><span class="va">Church.to.1696</span>, 
       dnn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="st">"Membership"</span>, <span class="st">"View"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;           View</span>
@@ -927,7 +969,7 @@ To help make this more visible we can add a vline.</p>
 <p>As explained on the website, the Village of Salem was governed by a Committee of Five in addition to the Town Meeting <a href="https://www.tulane.edu/~salem/Politics%20Intro.html">see Salem Village Politics</a>.</p>
 <p>The data set that is part of this package called committee_list is structured differently than the original data. It is in “long” format with one row per person-year for each committee member for the years they served. This can be coverted to various other formats if desired.</p>
 <p>You can make a table see how the make up of the committee changed over the period from 1687 to 1698.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit">
+<div class="sourceCode" id="cb28"><pre class="downlit">
 
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">committee_list</span><span class="op">$</span><span class="va">Petition</span>, <span class="va">committee_list</span><span class="op">$</span><span class="va">Year</span>, dnn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Petition"</span>, <span class="st">"Year"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;         Year</span>
@@ -936,7 +978,7 @@ To help make this more visible we can add a vline.</p>
 <span class="co">#&gt;   NoS       1    1    0    0    0    0    0    0    1    0    1    0    0    0</span>
 <span class="co">#&gt;   Pro-P     3    3    3    2    3    3    0    1    0    5    4    5    3    3</span></pre></div>
 <p>The website shows a complex pivot table involving three variables.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit">
+<div class="sourceCode" id="cb29"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span> <span class="va">committee_list</span><span class="op">$</span><span class="va">Petition</span>, <span class="va">committee_list</span><span class="op">$</span><span class="va">Social</span>, <span class="va">committee_list</span><span class="op">$</span><span class="va">Year</span> <span class="op">)</span>
 <span class="co">#&gt; , ,  = 1685</span>
 <span class="co">#&gt; </span>
@@ -1050,7 +1092,7 @@ To help make this more visible we can add a vline.</p>
 <span class="co">#&gt;   NoS                0          0           0</span>
 <span class="co">#&gt;   Pro-P              3          0           0</span></pre></div>
 <p>One way to explore the association is to cross tabulate the Petition and Social variables. However, this counts the same people multiple times if they served for multiple years.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit">
+<div class="sourceCode" id="cb30"><pre class="downlit">
 
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span> <span class="va">committee_list</span><span class="op">$</span><span class="va">Petition</span>, <span class="va">committee_list</span><span class="op">$</span><span class="va">Social</span> <span class="op">)</span>
 <span class="co">#&gt;         </span>
@@ -1059,7 +1101,7 @@ To help make this more visible we can add a vline.</p>
 <span class="co">#&gt;   NoS                0          0           4</span>
 <span class="co">#&gt;   Pro-P             35          0           3</span></pre></div>
 <p>To adjust for this and get the data matching the website we need to remove those duplicates. Then the table matches that found at <a href="https://www.tulane.edu/~salem/Committeemen%20Social%20Report.html">Committee Social Report</a>.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit">
+<div class="sourceCode" id="cb31"><pre class="downlit">
 <span class="va">committee_list2</span> <span class="op">&lt;-</span>  <span class="va">committee_list</span> <span class="op">%&gt;%</span> <span class="fu">group_by</span><span class="op">(</span><span class="va">Committee.Members</span><span class="op">)</span> <span class="op">%&gt;%</span> 
                              <span class="fu">summarize</span><span class="op">(</span>Social <span class="op">=</span> <span class="fu">first</span><span class="op">(</span><span class="va">Social</span><span class="op">)</span>, 
                                        Petition <span class="op">=</span> <span class="fu">first</span><span class="op">(</span><span class="va">Petition</span><span class="op">)</span>,
@@ -1079,7 +1121,7 @@ To help make this more visible we can add a vline.</p>
 <p>The tax_comparison data set is also set up in long format. This can then be used to create a comparison table similar to the table on <a href="https://www.tulane.edu/~salem/1690%20Tax%20Comparisons.html">Tax Comparison</a>. One limitation is that R does not have a built in function for the mode.</p>
 <p>This is the most complex analysis on the website. Complications include people moving in and out of the data in different years (individuals appear between one and six times), the changing amount of taxes over the time period and name changes. The analysis looks at both group and individual level comparisons and individual level mobility.</p>
 <p>Here is the distribution of tax payers by year.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit">
+<div class="sourceCode" id="cb32"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">tax_comparison</span><span class="op">$</span><span class="va">Year</span>, dnn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Year"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">kable</span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Tax payers by year"</span><span class="op">)</span></pre></div>
 <table class="table">
 <caption>Tax payers by year</caption>
@@ -1117,7 +1159,7 @@ To help make this more visible we can add a vline.</p>
 <p>The next table summarizes descriptive statistics for all of the years. The website general shows one year at a time or in some cases compares two years. You can add <code><a href="https://rdrr.io/r/stats/filter.html">filter(Year = 1681)</a></code> to display only the 1681 data, changing the filter to select whatever years you want. For example to select all of the data for 1681 through 1694 one way would be to add <code>select(Year &gt;= 1691 &amp; Year &lt;= 1694)</code>.</p>
 <p>Let’s start by looking at the group level data.</p>
 <p>The first table is for everyone in a year. The second separates the data based on which petition the tax payer signed (or if they) did not sign.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit">
+<div class="sourceCode" id="cb33"><pre class="downlit">
 <span class="va">tax_comparison</span> <span class="op">%&gt;%</span> <span class="fu">group_by</span><span class="op">(</span><span class="va">Year</span><span class="op">)</span> <span class="op">%&gt;%</span>
             <span class="fu">summarize</span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Tax</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>, median <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">Tax</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>,
                                    minimum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">Tax</span><span class="op">)</span>,
@@ -1199,7 +1241,7 @@ To help make this more visible we can add a vline.</p>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb29"><pre class="downlit">
+<div class="sourceCode" id="cb34"><pre class="downlit">
 
 
 
@@ -1424,7 +1466,7 @@ To help make this more visible we can add a vline.</p>
 </tbody>
 </table>
 <p>To do the analysis comparing the median tax paid for the three groups we can graph the values over time. In this case, we will first make a data set of statistics to work with.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit">
+<div class="sourceCode" id="cb35"><pre class="downlit">
 <span class="va">yearly_tax</span> <span class="op">&lt;-</span> <span class="va">tax_comparison</span> <span class="op">%&gt;%</span> <span class="fu">group_by</span><span class="op">(</span><span class="va">Year</span>, <span class="va">Petition</span><span class="op">)</span> <span class="op">%&gt;%</span>
             <span class="fu">summarize</span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Tax</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>, median <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">Tax</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>,
                                    minimum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">Tax</span><span class="op">)</span>,
@@ -1435,9 +1477,9 @@ To help make this more visible we can add a vline.</p>
         <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Year</span>, y <span class="op">=</span> <span class="va">median</span>, group <span class="op">=</span> <span class="va">Petition</span>, color <span class="op">=</span> <span class="va">Petition</span><span class="op">)</span> <span class="op">+</span>
         <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
         <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Tax paid by petition"</span>, y <span class="op">=</span> <span class="st">"Shillings"</span>, x <span class="op">=</span> <span class="st">"Year"</span><span class="op">)</span> </pre></div>
-<p><img src="recreating_analyses_files/figure-html/unnamed-chunk-21-1.png" width="480"></p>
+<p><img src="recreating_analyses_files/figure-html/unnamed-chunk-23-1.png" width="480"></p>
 <p>The analysis of annual data on the website specifically focuses on thse who were Pro- and Anti- Parris based on petition signatures. As can be seen in the previous graph, those who did not sign petititions always had a lower median tax, but the other two groups were inconsistent. To address this the site presents the ratio of the medians of the two group. A ratio of 1.0 means that the median tax for the two groups was identical. A ratio of great than 1 means that the Pro-Parris group had a higher median. A ratio of less than one means that the Anti-Parris group had a higher median.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit">
+<div class="sourceCode" id="cb36"><pre class="downlit">
 
 <span class="va">ratios</span> <span class="op">&lt;-</span> <span class="va">yearly_tax</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Petition</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Pro-P"</span>, <span class="st">"Anti-P"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
                    <span class="fu">select</span><span class="op">(</span><span class="va">Year</span>, <span class="va">Petition</span>, <span class="va">median</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -1491,7 +1533,7 @@ To help make this more visible we can add a vline.</p>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb32"><pre class="downlit">
+<div class="sourceCode" id="cb37"><pre class="downlit">
 <span class="fu">ggplot</span><span class="op">(</span><span class="va">ratios</span>, 
         <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Year</span>, y <span class="op">=</span> <span class="va">median_ratio</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
         <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
@@ -1499,9 +1541,9 @@ To help make this more visible we can add a vline.</p>
         <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">1</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span>
         <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Ratio of Pro- to Anti- Parris median tax"</span>,
              y <span class="op">=</span> <span class="st">"Ratio"</span>, x <span class="op">=</span> <span class="st">"Year"</span><span class="op">)</span> </pre></div>
-<p><img src="recreating_analyses_files/figure-html/unnamed-chunk-22-1.png" width="480"></p>
+<p><img src="recreating_analyses_files/figure-html/unnamed-chunk-24-1.png" width="480"></p>
 <p>The same analysis can be done but substituting mean for median.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit">
+<div class="sourceCode" id="cb38"><pre class="downlit">
 <span class="va">ratios</span> <span class="op">&lt;-</span> <span class="va">yearly_tax</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Petition</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Pro-P"</span>, <span class="st">"Anti-P"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
                    <span class="fu">select</span><span class="op">(</span><span class="va">Year</span>, <span class="va">Petition</span>, <span class="va">mean</span><span class="op">)</span> <span class="op">%&gt;%</span> 
                    <span class="fu">pivot_wider</span><span class="op">(</span>id_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">Year</span><span class="op">)</span>, values_from <span class="op">=</span> <span class="va">mean</span>, 
@@ -1554,7 +1596,7 @@ To help make this more visible we can add a vline.</p>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb34"><pre class="downlit">
+<div class="sourceCode" id="cb39"><pre class="downlit">
 <span class="fu">ggplot</span><span class="op">(</span><span class="va">ratios</span>, 
         <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Year</span>, y <span class="op">=</span> <span class="va">mean_ratio</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
         <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
@@ -1562,11 +1604,11 @@ To help make this more visible we can add a vline.</p>
         <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">1</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span>
         <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Ratio of Pro- to Anti- Parris mean tax"</span>,
              y <span class="op">=</span> <span class="st">"Ratio"</span>, x <span class="op">=</span> <span class="st">"Year"</span><span class="op">)</span> </pre></div>
-<p><img src="recreating_analyses_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
+<p><img src="recreating_analyses_files/figure-html/unnamed-chunk-25-1.png" width="700"></p>
 <p>The site also looks at individual trajectories using ranks and percentiles within each year, allowing analysis of whether an individual’s financial position changed substantially over time. Individuals whose percentile changed by more than 10 are considered to have moved substantially.</p>
 <p>There are many ways to do this, and the method chosen will depend on your purposes. The example below is not necessarily the best or most efficient. To do the analysis we need to obtain the rank and percentile for each of the tax amounts within the years. Finally, we need to compare those. In this example we will focus on the <a href="https://www.tulane.edu/~salem/1681-90%20Rank.html">1681-1690 comparison shown</a> while providing a framework for the others.</p>
 <p>First create a wide data set and calculate ranks and cumulative proportions. This allows viewing and sorting of individuals for specific years.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit">
+<div class="sourceCode" id="cb40"><pre class="downlit">
 <span class="va">persisters</span> <span class="op">&lt;-</span> <span class="va">tax_comparison</span> <span class="op">%&gt;%</span> <span class="fu">pivot_wider</span><span class="op">(</span>id_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">Name</span>, <span class="va">Petition</span><span class="op">)</span>,
                                              names_from <span class="op">=</span> <span class="va">Year</span>,
                                              names_prefix <span class="op">=</span> <span class="st">"X"</span>,
@@ -1575,7 +1617,7 @@ To help make this more visible we can add a vline.</p>
                                  <span class="fu">relocate</span><span class="op">(</span><span class="va">X1681</span>, .before <span class="op">=</span> <span class="va">X1690</span><span class="op">)</span> </pre></div>
 <p>Next we want to compare our two selected years and determine the number who went up, down and stayed the same and how that relates to the petitions. This analysis is based on the empirical cumulative relative frequency.</p>
 <p>To reproduce the analysis on the website we use the dplyr min_rank function (which is equivalent to rank(ties.method = “min”) in base R). This ranks all of the tax payments with gaps between the ties. So if two people are tied for the second rank, the person after them would be ranked fourth. Turn the rank into a percentile by subtracting 1 and dividing by the number of tax payers in that year.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit">
+<div class="sourceCode" id="cb41"><pre class="downlit">
 
 <span class="va">comparison</span> <span class="op">&lt;-</span> <span class="va">persisters</span> <span class="op">%&gt;%</span> 
                     <span class="fu">mutate</span><span class="op">(</span><span class="fu">across</span><span class="op">(</span><span class="fu">starts_with</span><span class="op">(</span><span class="st">"X"</span><span class="op">)</span>, 
