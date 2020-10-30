@@ -57,19 +57,16 @@ salem_theme <-  theme(axis.text.x = element_text(angle = 45, vjust = .5))
 ```
 
 
-## Ggplot and the Tidyverse
-
-### Accusations
+## Accusations and Executions
 
 The website includes displays of the distribution by month.
 
-#### Histogram and frequency table by month
+#### Histogram and frequency table of accusations by month
 
 ```{r fig.width=5}
 ggplot(data = accused_witches) + 
        aes(x = Month.of.Accusation.Name) +
        geom_bar() +
-       #geom_dotplot(dotsize = .17, method = "histodot", binwidth = 1, fill = "red") +
        labs(title = "Accusations by month", x = "Month")  +
        scale_x_discrete(drop = FALSE) +
        salem_theme
@@ -110,6 +107,7 @@ monthly_accusations <- accused_witches %>%
                       group_by(Month.of.Accusation.Name) %>%
                       summarize(number = n()) %>% 
                       mutate(cumulative = cumsum(number) )
+
 monthly_accusations %>% kable(caption = "Accusations by Month")
 
 ggplot(data = monthly_accusations) +
@@ -134,7 +132,7 @@ ggplot(data = monthly_accusations) +
 
 
 monthly_accusations %>% 
-             arrange(desc(number))  %>% 
+            arrange(desc(number))  %>% 
             mutate(Month.of.Accusation.Name = 
                    factor(Month.of.Accusation.Name, 
                          levels=Month.of.Accusation.Name)) %>%
@@ -142,8 +140,8 @@ monthly_accusations %>%
         ggplot() +
              aes(x = Month.of.Accusation.Name, y = pareto_cumulative) +
              geom_point( ) +
-             geom_path(aes(y=pareto_cumulative, group=1), colour="slateblue1", lty=3, size=0.9) +
-             labs(title = "Pareto Cumulative Distribution of Accusations by Month")+
+             geom_path(aes(y=pareto_cumulative, group=1), colour="blue", lty=3, size=0.9) +
+             labs(title = "Pareto Cumulative Distribution of Accusations by Month") +
              salem_theme
 
 
@@ -151,19 +149,19 @@ monthly_accusations %>%
              arrange(desc(number))  %>% 
             mutate(Month.of.Accusation.Name = 
                    factor(Month.of.Accusation.Name, 
-                         levels=Month.of.Accusation.Name)) %>%
+                         levels = Month.of.Accusation.Name)) %>%
             mutate(pareto_cumulative = cumsum(number) ) %>%
         ggplot() +
              aes(x = Month.of.Accusation.Name, y = number) +
              geom_col() +
-             geom_path(aes(y=pareto_cumulative, group=1), colour="slateblue1", lty=3, size=0.9) +
+             geom_path(aes(y=pareto_cumulative, group = 1), colour = "blue", lty=3, size=0.9) +
              labs(title = "Pareto Histogram of Accusations by Month") +
              salem_theme
 
 
 ```
 
-#### Chronology of Executions
+### Executions
 
 Creating the bar chart of executions over time is similar to creating
 that for accusations.  Additionally, these are shown as what is 
@@ -176,7 +174,6 @@ to NA or missing) we'll remove the missing cases from the graph.
 ggplot(data = na.omit(accused_witches)) + 
        aes(x = Month.of.Execution.Name) +
        geom_bar() +
-       #geom_dotplot(dotsize = .17, method = "histodot", binwidth = 1, fill = "red") +
        labs(title = "Executions by month", x = "Month")  +
        scale_x_discrete(drop = FALSE) +
        salem_theme
@@ -268,8 +265,6 @@ accused_witches %>% filter(Residence == "Andover") %>%
    geom_bar() +
    scale_x_discrete(drop=FALSE) +
    salem_theme
-
-
 ```
 
 The website encourages examining the period before and after the convening of 
@@ -314,10 +309,16 @@ accused_witches %>%
 We can use maps to represent the geographic distribution over time 
 spatially.  The salem_region data set is an sf (simple features) data 
 set that provides geographic data for the towns in the three Massachuessets 
-counties represented in our data.  Not all of the towns in these three counties
+counties represented in our data: Essex, Middlesex and Sussex. 
+
+To use this data you will need to install the sf package. The code at the
+start of the second code chunk tests for whether you have done this.
+
+Not all of the towns in these three counties
 had accusations: the majority did not. The data also include the total
 accused for each town and the monthly accused for the towns that ever had an 
-accusation. However, these figures should _never_ be used outside of maps. 
+accusation. However, these variables should _never_ be used outside of maps
+because the results will be incorrect. 
 This is because many towns have multiple records. This is especially true if 
 they include islands, which is common in this region of the state. 
 These are based on modern municipal boundaries which are close to
@@ -344,24 +345,25 @@ newdata$TOWN_LABEL <- ifelse(newdata$n_accused == 0, NA,  newdata$TOWN_LABEL)
 ```
 
 ```{r fig.width=8, fig.height=8}
-p1 <- ggplot(newdata) 
-p2 <- geom_sf_text(aes(label = TOWN_LABEL), color = "blue", size = 2, nudge_x = 5,
-                nudge_y = 5, na.rm = TRUE) 
-p3 <-       scale_fill_manual(values = c( "grey", "red"), na.value = "white") 
-
-p1  + geom_sf(data = newdata,  aes(fill = February.Any), color = "black", size = .1) +
-  p3 + p2 + labs(title = "Location of Accusations in February") 
-
-p1 +  geom_sf(data = newdata,  aes(fill = July.Any), color = "black", size = .1) +
-  p3 + p2 + labs(title = "Location of Accusations in July") 
-
-
-p1 + geom_sf(data = newdata,  aes(fill = August.Any), color = "black", size = .1) +
-  p3 + p2  + labs(title = "Location of Accusations in August") 
-
-p1 + geom_sf(data = newdata,  aes(fill = November.Any), color = "black", size = .1) +
-  p3 + p2 + labs(title = "Location of Accusations in November") 
-
+if (requireNamespace("sf", quietly = TRUE)) {
+      p1 <- ggplot(newdata) 
+      p2 <- geom_sf_text(aes(label = TOWN_LABEL), color = "blue", size = 2, nudge_x = 5,
+                      nudge_y = 5, na.rm = TRUE) 
+      p3 <-       scale_fill_manual(values = c( "grey", "red"), na.value = "white") 
+      
+      p1  + geom_sf(data = newdata,  aes(fill = February.Any), color = "black", size = .1) +
+        p3 + p2 + labs(title = "Location of Accusations in February") 
+      
+      p1 +  geom_sf(data = newdata,  aes(fill = July.Any), color = "black", size = .1) +
+        p3 + p2 + labs(title = "Location of Accusations in July") 
+      
+      
+      p1 + geom_sf(data = newdata,  aes(fill = August.Any), color = "black", size = .1) +
+        p3 + p2  + labs(title = "Location of Accusations in August") 
+      
+      p1 + geom_sf(data = newdata,  aes(fill = November.Any), color = "black", size = .1) +
+        p3 + p2 + labs(title = "Location of Accusations in November") 
+}
 ```
 
 
@@ -434,7 +436,7 @@ addmargins( table(salem_village$Petition, salem_village$Church.to.1696,
       dnn = c( "Membership", "View")))
 ```
 
-#### Political Power
+### Political Power
 
 As explained on the website, the Village of Salem was governed by a Committee of 
 Five in addition to the Town Meeting 
