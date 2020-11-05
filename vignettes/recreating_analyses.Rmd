@@ -350,17 +350,20 @@ if (requireNamespace("sf", quietly = TRUE)) {
       p2 <- geom_sf_text(aes(label = TOWN_LABEL), color = "blue", size = 2, nudge_x = 5,
                       nudge_y = 5, na.rm = TRUE) 
       p3 <-       scale_fill_manual(values = c( "grey", "red"), na.value = "white") 
-      
+}
+if (requireNamespace("sf", quietly = TRUE)) {
       p1  + geom_sf(data = newdata,  aes(fill = February.Any), color = "black", size = .1) +
         p3 + p2 + labs(title = "Location of Accusations in February") 
-      
+}
+if (requireNamespace("sf", quietly = TRUE)) {
       p1 +  geom_sf(data = newdata,  aes(fill = July.Any), color = "black", size = .1) +
         p3 + p2 + labs(title = "Location of Accusations in July") 
-      
-      
+}     
+ if (requireNamespace("sf", quietly = TRUE)) {     
       p1 + geom_sf(data = newdata,  aes(fill = August.Any), color = "black", size = .1) +
         p3 + p2  + labs(title = "Location of Accusations in August") 
-      
+ }
+if (requireNamespace("sf", quietly = TRUE)) {
       p1 + geom_sf(data = newdata,  aes(fill = November.Any), color = "black", size = .1) +
         p3 + p2 + labs(title = "Location of Accusations in November") 
 }
