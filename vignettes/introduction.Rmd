@@ -29,7 +29,8 @@ for this package.)
 ### References
 
 A detailed discussion of the data sources can be found on the
-[https://www.tulane.edu/~salem/Notes.html]( the notes page of the website).
+[ the notes page of the website](https://www.tulane.edu/~salem/Notes.html).
+.
 
 A list of scholarly sources about the Salem witch trials (through about 2008)
 is on the [bibliography page](https://www.tulane.edu/~salem/Bibliography.html).
