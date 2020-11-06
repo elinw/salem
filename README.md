@@ -8,11 +8,10 @@ The goal of salem is to provide access to data and other materials related to th
 
 ## Installation
 
-We're not on CRAN!
+We're on CRAN!
 
 ``` r
 install.packages("salem")
-#> installing the source package 'salem'
 ```
 
 If you want to do maps you should also install `sf`.

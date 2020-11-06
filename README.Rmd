@@ -27,9 +27,9 @@ of historian Richard Latner which is available at
 
 ## Installation
 
-We're not on CRAN! 
+We're on CRAN! 
 
-```{r}
+```{r,, eval = FALSE}
 install.packages("salem")
 ```
 
