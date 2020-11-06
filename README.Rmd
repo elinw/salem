@@ -27,8 +27,16 @@ of historian Richard Latner which is available at
 
 ## Installation
 
-We're not on CRAN yet, but you can install the development version from
-github. 
+We're not on CRAN! 
+
+```{r}
+install.packages("salem")
+```
+
+If you want to do maps you should also install `sf`.  
+
+
+You can install the development version from github. Not much difference though.
 
 ```{r, eval = FALSE}
 # install.packages("devtools")

@@ -10,7 +10,14 @@ One of the important goals of this project is to make this data available for ed
 
 ## Installation
 
-We're not on CRAN yet, but you can install the development version from github.
+We're on CRAN!
+
+``` r
+install.packages("salem")
+#> installing the source package 'salem'
+```
+
+You can install the development version from github. But there won't be much difference ... and this website is where educational materials will be posted.
 
 ``` r
 # install.packages("devtools")
