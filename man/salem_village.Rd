@@ -3,7 +3,7 @@
 \docType{data}
 \name{salem_village}
 \alias{salem_village}
-\title{Salem village}
+\title{Salem_village}
 \format{
 A data frame with 137 rows and 5 variables:
 \describe{

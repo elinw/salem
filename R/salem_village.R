@@ -1,4 +1,4 @@
-#' Salem village
+#' Salem_village
 #'
 #' A dataset containing tax list of everyone who appeared on
 #' the tax assessment rolls for 1690, 1695, and 1697. This is a "a good, though

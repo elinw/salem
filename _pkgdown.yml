@@ -1,3 +1,7 @@
 template:
   params:
     bootswatch: sandstone
+  path: inst/pkgdown/templates/
+  default_assets: false
+
+url: https://elinw.github.io/salem

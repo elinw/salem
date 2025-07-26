@@ -24,7 +24,7 @@ License: CC BY-NC-SA 4.0
 Encoding: UTF-8
 LazyData: true
 Depends:
-    R (>= 3.5.0)
+    R (>= 4.1.0)
 Imports:
 Suggests:
     dplyr (>= 1.0.0),
@@ -37,10 +37,11 @@ Suggests:
 VignetteBuilder: 
     knitr
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.2
 Collate:
     "accused_witches.R"
     "committee_list.R"
+    "Forfeitures_Description.R"
     "salem_village.R"
     "tax_comparison.R"
     "parris_social.R"

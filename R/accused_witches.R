@@ -1,4 +1,4 @@
-#' Accused witches
+#' accused witches
 #'
 #' A dataset containing list of accused witches, the month of accusation,
 #' whether they were executed and, if so, what month.
