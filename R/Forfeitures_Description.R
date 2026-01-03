@@ -22,6 +22,6 @@
   #' Hale-John Hale, A modest Inquiry Into the Nature of Witchcraft (Boston, 1702), in Burr, Narratives, 399-432.
   #' Gage-Thomas Gage, the History of Rowley (Boston, 1840).
 
-#' @source \reference{Brown, David C. “The Forfeitures at Salem, 1692.” The William and Mary Quarterly,#' vol. 50, no. 1, 1993, pp. 85–111. JSTOR, www.jstor.org/stable/2947237?seq=1, 10.2307/2947237}
+#' @source {Brown, David C. “The Forfeitures at Salem, 1692.” The William and Mary Quarterly,#' vol. 50, no. 1, 1993, pp. 85–111. JSTOR, www.jstor.org/stable/2947237?seq=1, 10.2307/2947237}
 
 "forfeitures"
