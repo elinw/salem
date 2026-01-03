@@ -5,8 +5,9 @@
 \alias{salem_region}
 \title{Simple Features data for Salem}
 \format{
-A data frame with 437 rows and 28 variables:
+A simple features data frame with 437 rows and 28 variables:
 \describe{
+\item{geometry}{Simple Features geometry}
 \item{TOWN}{Name of town in upper case letters}
 \item{TOWN_ID}{ID of town}
 \item{TYPE}{Type of municipality C = City or T = Town}
@@ -34,7 +35,6 @@ A data frame with 437 rows and 28 variables:
 \item{October}{Number accused in October}
 \item{November}{Number accused in November}
 \item{TOWN_LABEL}{Town name to be used for labelling}
-\item{geometry}{Simple Features geometry}
 }
 }
 \source{

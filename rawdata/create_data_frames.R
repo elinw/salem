@@ -62,13 +62,13 @@ committee_list <- tidyr::pivot_longer(data = committee_list,
                                       cols = starts_with("X"),
                                       values_to  = "Year",
                                       names_to = "original_var_name",
-                                      values_drop_na = TRUE) %>%
+                                      values_drop_na = TRUE) |>
                                       select(-original_var_name)
 save(committee_list, file = "data/committee_list.rda")
 
 # We just need to do this because we can subset this to get the individual years.
 tax_comparison <- read.table("rawdata/Tax_Comparison_Data_Set.txt", sep = '\t',header = TRUE)
-tax_comparison <- tax_comparison %>%
+tax_comparison <- tax_comparison |>
                   tidyr::pivot_longer(
                                       cols = starts_with("X"),
                                       values_to  = "Tax",
@@ -89,7 +89,7 @@ library(dplyr)
 MA_towns <-st_read("rawdata/towns/townssurvey_shp/townsurvey_poly/TOWNSSURVEY_POLY.shp")
 # Select just the three counties with towns in the other data sets.
 # Note that towns in present day Maine wil not be mapped here.
-salem_region <- MA_towns %>% dplyr::filter(FIPS_STCO %in% c(25009, 25017, 25025))
+salem_region <- MA_towns |> dplyr::filter(FIPS_STCO %in% c(25009, 25017, 25025))
 # We need to do this because of an issue in the shape file.
 salem_region <- sf::st_buffer(salem_region, dist = 0)
 #change Danvers to "SALEM VLLAGE" and Salem to "SALEM TOWN to match
@@ -97,21 +97,22 @@ salem_region <- sf::st_buffer(salem_region, dist = 0)
 salem_region$TOWN[salem_region$TOWN == "DANVERS"] <- "SALEM VILLAGE"
 salem_region$TOWN[salem_region$TOWN == "SALEM"] <- "SALEM TOWN"
 
-accused_towns <- accused_witches %>%
-  mutate(TOWN = toupper(Residence)) %>%
-  group_by(TOWN) %>%
+accused_towns <- accused_witches |>
+  mutate(TOWN = toupper(Residence)) |>
+  group_by(TOWN) |>
   summarize(n_accused = n())
 
 # Add the total number accused to each town
-salem_region <- merge(salem_region, accused_towns, by = "TOWN", all = TRUE)
+salem_region <- merge(salem_region, accused_towns, by = "TOWN", all = TRUE) |>
+                  relocate(geography)
 
 # Add the total number of accused by month.
-accused_town_monthly <- accused_witches %>%
+accused_town_monthly <- accused_witches |>
   tidyr::pivot_wider(id_cols = c(Accused.Witch, Residence),
                      names_from = Month.of.Accusation.Name,
-                     values_from = Month.of.Accusation.Name) %>%
-  mutate(TOWN = toupper(Residence)) %>%
-  group_by(TOWN) %>%
+                     values_from = Month.of.Accusation.Name) |>
+  mutate(TOWN = toupper(Residence)) |>
+  group_by(TOWN) |>
   summarize(
     February = sum(!is.na(February)),
     March = sum(!is.na(March)),
@@ -130,7 +131,7 @@ salem_region <- merge(salem_region, accused_town_monthly,
 # Many towns have more than one row. This code creates a
 # TOWN_LABEL variable that is assigned to the largest area represented
 # in the records for the town.
-salem_region_max <- as.data.frame(salem_region) %>% group_by(TOWN)  %>%
+salem_region_max <- as.data.frame(salem_region) |> group_by(TOWN)  |>
   summarize(max_sqm = max(SQUARE_MIL))
 
 salem_region <- merge(salem_region, salem_region_max, by = "TOWN", all = TRUE)
@@ -140,6 +141,16 @@ salem_region$TOWN_LABEL <- ifelse(salem_region$SQUARE_MIL != salem_region$max_sq
 )
 
 # Drop the twentieth century data
-salem_region <- salem_region %>% select(-starts_with("POP"), -max_sqm)
+salem_region <- salem_region |> select(-starts_with("POP"), -max_sqm)
 save(salem_region, file = "data/salem_region.rda")
+
+
+# Compensation data
+compensation <- read.delim(file = "rawdata/compensation.txt")
+compensation$total_amount <-20*compensation$lb. + compensation$s. +
+  compensation$d./12
+compensation$gender <- c("Female", "Male", "Female", "Male", "Couple", "Female",
+            "Male", "Female", "Female", "Couple", "Couple", "Female", "Female",
+            "Female", "Female",
+            "Female", "Female", "Female", "Female")
 

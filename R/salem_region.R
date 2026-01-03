@@ -15,8 +15,9 @@
 #'
 #' FIPS refers to the Federal Information Processing Standard
 #'
-#' @format A data frame with 437 rows and 28 variables:
+#' @format A simple features data frame with 437 rows and 28 variables:
 #' \describe{
+#'   \item{geometry}{Simple Features geometry}
 #'   \item{TOWN}{Name of town in upper case letters}
 #'   \item{TOWN_ID}{ID of town}
 #'   \item{TYPE}{Type of municipality C = City or T = Town}
@@ -44,7 +45,6 @@
 #'   \item{October}{Number accused in October}
 #'   \item{November}{Number accused in November}
 #'   \item{TOWN_LABEL}{Town name to be used for labelling}
-#'   \item{geometry}{Simple Features geometry}
 #' }
 #' @source \url{https://docs.digital.mass.gov/dataset/massgis-data-community-boundaries-towns-survey-points}
 "salem_region"
