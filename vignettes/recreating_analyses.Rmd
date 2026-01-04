@@ -10,6 +10,7 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
+
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -343,9 +344,18 @@ newdata <- salem_region |> mutate(February.Any = February > 0, March.Any = March
                                    November.Any = November > 0)
 
 newdata$TOWN_LABEL <- ifelse(newdata$n_accused == 0, NA,  newdata$TOWN_LABEL)
+
+```
+```{r}
+
+
 ```
 
-```{r fig.width=8, fig.height=8}
+Here `requireNamespace` is used to check whether the `sf` package is installed.
+That is because `sf` is only suggested and not required. It can be complex to
+install on some computers.
+
+```{r  fig.width=8, fig.height=8}
 library(sf)
 if (requireNamespace("sf", quietly = TRUE)) {
 
@@ -356,26 +366,34 @@ if (requireNamespace("sf", quietly = TRUE)) {
       p3 <-       scale_fill_manual(values = c( "grey", "red"), na.value = "white") 
 }
 
+```
+```{r eval=TRUE,fig.width=8, fig.height=8}
 if (requireNamespace("sf", quietly = TRUE)) {
-      p1  + geom_sf(data = newdata,  aes(fill = February.Any), color = "black", 
+
+      p1  + geom_sf(data = newdata,  
+                    aes(geometry = newdata$geometry,  fill = February.Any
+                        ), color = "black", 
                     size = .1) +
         p3 + p2 + labs(title = "Location of Accusations in February") 
 }
 
 if (requireNamespace("sf", quietly = TRUE)) {
-      p1 +  geom_sf(data = newdata,  
-                    aes(fill = July.Any), color = "black", size = .1) +
+      p1 +  geom_sf(data = newdata, 
+                    aes(geometry = geometry, fill = July.Any), 
+                    color = "black", size = .1) +
         p3 + p2 + labs(title = "Location of Accusations in July") 
 }  
 ```
-```{r fig.width=8, fig.height=8}
+```{r eval=FALSE,fig.width=8, fig.height=8}
  if (requireNamespace("sf", quietly = TRUE)) {     
-      p1 + geom_sf(data = newdata,  aes(fill = August.Any), color = "black", 
+      p1 + geom_sf(data = newdata,  
+                   aes(fill = August.Any, geometry = geometry), color = "black", 
                    size = .1) +
         p3 + p2  + labs(title = "Location of Accusations in August") 
  }
 if (requireNamespace("sf", quietly = TRUE)) {
-      p1 + geom_sf(data = newdata,  aes(fill = November.Any), color = "black", 
+      p1 + geom_sf(data = newdata,  aes(fill = November.Any, geometry = geometry), color = "black",
+                   
                    size = .1) +
         p3 + p2 + labs(title = "Location of Accusations in November") 
 }

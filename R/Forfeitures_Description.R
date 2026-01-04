@@ -6,6 +6,7 @@
 #' Attainder reversed, and Comments.
 #' @format  A data frame with 30 rows and 6 variables with the name Person_condemned:
 #' \describe{
+#'   \item{table}{Source table}
   #' \item{Name}{Name of those who were condemned during the trial}
   #' \item{Marital Statues (if female) (source)}{The marital status of those condemned if they were female with the source}
   #' \item{1. evidence of foreiture (source) 2. Article seized}{The evidence they had for forefeiture, the source in which they had and if they had aritcle seized or not for those who were condemned}

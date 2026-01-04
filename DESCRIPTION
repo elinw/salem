@@ -40,9 +40,11 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Collate:
     "accused_witches.R"
+    "cent17th.R"
     "committee_list.R"
     "ergotism_symptoms.R"
     "Forfeitures_Description.R"
+    "long_doc_name.R"
     "salem_village.R"
     "tax_comparison.R"
     "parris_social.R"

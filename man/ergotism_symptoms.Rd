@@ -7,25 +7,25 @@
 \format{
 A data frame with 22 rows and 20 variables:
 \describe{
-\item{reported_sufferers}{Name of the sufferer}
+\item{name}{Name of the sufferer}
 \item{rsw_volume}{Volume number of RSW}
 \item{rsw_page}{Page number}
-\item{vomitting}{Vomitting (1)}
-\item{diarrhea}{Diarrhea (1)}
-\item{livid_skin}{Livid skin (1)}
-\item{permanent_contractures}{Permanent contractures (1)}
-\item{pain_in_extremities}{Pain in extremities (1)}
-\item{death}{Death (1)}
-\item{temporary_muscle_stiffness}{Temporary muscle stiffness (1)}
-\item{convulsions}{Convulsions (1)}
-\item{ravenous_appetite}{Ravenous appetite (1)}
-\item{perceptual_disturbances}{Perceptual disturbances (1)}
+\item{vomitting}{Vomitting }
+\item{diarrhea}{Diarrhea }
+\item{livid_skin}{Livid skin }
+\item{permanent_contractures}{Permanent contractures }
+\item{pain_in_extremities}{Pain in extremities }
+\item{death}{Death }
+\item{temporary_muscle_stiffness}{Temporary muscle stiffness }
+\item{convulsions}{Convulsions Cases Spanos and Gottlieb considered uncertain are coded missing.}
+\item{ravenous_appetite}{Ravenous appetite }
+\item{perceptual_disturbances}{Perceptual disturbances Cases Spanos and Gottlieb considered uncertain are coded missing. }
 \item{apparitions}{Apparitions }
-\item{sensations_of_hot_&_cold}{Sensations of hot & cold}
+\item{sensations_of_hot_and_cold}{Sensations of hot & cold}
 \item{skin_sensations}{Skin sensations}
 \item{stomach_pain}{Stomach pain}
-\item{choking_sensations}{choking sensations}
-\item{temporary_inability_to_speak}{temporary inability to speak}
+\item{choking_sensations}{Choking sensations}
+\item{inability_to_speak}{Temporary inability to speak}
 \item{total}{Total number of symptoms}
 }
 }
@@ -40,12 +40,19 @@ ergotism_symptoms
 A dataset containing the ergotism data presented in Spanos and Gottlieb
 (1976) Table 1. The dataframe records the symptoms possible symptoms of
 ergotism reported about 22 individuals.
-Spanos and Gottlieb drew the data from depositions in
-the \emph{Records of the Salem Witchcraft} collection. Details of data collection
-are provided in the article.
 }
 \details{
+Spanos and Gottlieb, with one exeption (E. Keysar), drew the data from depositions in
+the \emph{Records of the Salem Witchcraft} collection. Details of data collection
+are provided in the article. The data set indicates the volume and page
+of the individual report.
+J. Doritch is also mentioned in volume 2 page 179 of \emph{RSW}.
+
 The article is an attempt to compare the actual symptoms reported to a
 list of symptoms of ergotism.
+For each variable a 1 inidicates that the symptom was reported, while a
+0 indicated it was not reported. They conclude that "We examined
+these 112 depositions looking for behavior that, even in a broad sense,
+might possibly represent symptoms of convulsive ergotism."
 }
 \keyword{datasets}
