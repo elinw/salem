@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
   comment = "#>",
   message = FALSE
 )
+```
+```{r libraries}
 library(dplyr)
 library(ggplot2)
 library(knitr)
@@ -156,7 +158,8 @@ monthly_accusations |>
         ggplot() +
              aes(x = Month.of.Accusation.Name, y = number) +
              geom_col() +
-             geom_path(aes(y=pareto_cumulative, group = 1), colour = "blue", lty=3, size=0.9) +
+             geom_path(aes(y=pareto_cumulative, group = 1), colour = "blue", 
+                       lty = 3, linewidth = 0.9) +
              labs(title = "Pareto Histogram of Accusations by Month") +
              salem_theme
 
@@ -355,10 +358,10 @@ Here `requireNamespace` is used to check whether the `sf` package is installed.
 That is because `sf` is only suggested and not required. It can be complex to
 install on some computers.
 
-```{r  fig.width=8, fig.height=8}
-library(sf)
-if (requireNamespace("sf", quietly = TRUE)) {
+```{r  eval=FALSE, fig.width=8, fig.height=8}
 
+if (requireNamespace("sf", quietly = TRUE)) {
+     library(sf)
       p1 <- ggplot(newdata) 
       p2 <- geom_sf_text(aes(label = TOWN_LABEL), color = "blue", size = 2, 
                               nudge_x = 5,
@@ -367,7 +370,7 @@ if (requireNamespace("sf", quietly = TRUE)) {
 }
 
 ```
-```{r eval=TRUE,fig.width=8, fig.height=8}
+```{r eval=FALSE,fig.width=8, fig.height=8}
 if (requireNamespace("sf", quietly = TRUE)) {
 
       p1  + geom_sf(data = newdata,  
@@ -378,6 +381,7 @@ if (requireNamespace("sf", quietly = TRUE)) {
 }
 
 if (requireNamespace("sf", quietly = TRUE)) {
+      library(sf)
       p1 +  geom_sf(data = newdata, 
                     aes(geometry = geometry, fill = July.Any), 
                     color = "black", size = .1) +
