@@ -66,14 +66,14 @@ if (!requireNamespace("sf", quietly = TRUE)) {
 ```{r eval=TRUE,fig.width=8, fig.height=8}
 # Set up some common elements.
 
-#if (requireNamespace("sf", quietly = TRUE)) {
+
 
       p1 <- ggplot(salem_region)  +
              geom_sf_text(aes(label = TOWN_LABEL), color = "blue", size = 2, 
                               nudge_x = 5,
                                nudge_y = 5, na.rm = TRUE) 
         p2 <- scale_fill_manual(values = c( "grey", "red"), na.value = "white") 
-#}
+
 
 ```
 
@@ -103,45 +103,63 @@ newdata <- salem_region |> mutate(February.Any = February > 0,
                         ), color = "black", 
                     size = .1)+
                    labs(title = "Location of Accusations in February") +
-                   scale_fill_manual(values = c( "grey", "red"), na.value = "white") 
+                   scale_fill_manual(values = c( "grey", "red"), na.value = "white",
+                                     labels = c("None", "At least 1", "Never"))  +
+                  theme(legend.title = element_blank(), legend.position = "bottom")
 
       p1  + geom_sf(data = newdata,  
                     aes(geometry = geometry,  fill = March.Any
                         ), color = "black", 
                     size = .1)+
                    labs(title = "Location of Accusations in March") +
-                   scale_fill_manual(values = c( "grey", "red"), na.value = "white") 
+                   scale_fill_manual(values = c( "grey", "red"), na.value = "white",
+                                     labels = c("None", "At least 1", "Never"))  +
+                  theme(legend.title = element_blank(), legend.position = "bottom")
+      
       p1  + geom_sf(data = newdata,  
                     aes(geometry = geometry,  fill = April.Any
                         ), color = "black", 
                     size = .1)+
                    labs(title = "Location of Accusations in April") +
-                  scale_fill_manual(values = c( "grey", "red"), na.value = "white") 
+                  scale_fill_manual(values = c( "grey", "red"), na.value = "white",
+                                    labels = c("None", "At least 1", "Never")) +
+                  theme(legend.title = element_blank(), legend.position = "bottom")
       
       p1 +  geom_sf(data = newdata, 
                     aes(geometry = geometry, fill = July.Any), 
                     color = "black", size = .1) +
                     labs(title = "Location of Accusations in July") +
-                    scale_fill_manual(values = c( "grey", "red"), na.value = "white")
+                    scale_fill_manual(values = c( "grey", "red"), na.value = "white",
+                                      labels = c("None", "At least 1", "Never")) +
+                  theme(legend.title = element_blank(), legend.position = "bottom")
   
       p1 + geom_sf(data = newdata,  
                    aes(fill = August.Any, geometry = geometry), 
                    color = "black", 
                    size = .1) +
-                  labs(title = "Location of Accusations in August") +
-                  scale_fill_manual(values = c( "grey", "red"), na.value = "white") 
+                  labs(title = "Location of Accusations in August",
+                       labels = c("None", "At least 1", "Never")) +
+                  scale_fill_manual(values = c( "grey", "red"), na.value = "white",
+                                    labels = c("None", "At least 1", "Never")) +
+                  theme(legend.title = element_blank(), legend.position = "bottom")
+      
        p1 + geom_sf(data = newdata,  
                    aes(fill = October.Any, geometry = geometry), 
                    color = "black",
                    size = .1) +
-                   labs(title = "Location of Accusations in Octoberr") +
-                  scale_fill_manual(values = c( "grey", "red"), na.value = "white")  
+                   labs(title = "Location of Accusations in October",
+                        ) +
+                  scale_fill_manual(values = c( "grey", "red"), na.value = "white",
+                                    labels = c("None", "At least 1", "Never"))  +
+                  theme(legend.title = element_blank(), legend.position = "bottom") 
       p1 + geom_sf(data = newdata,  
                    aes(fill = November.Any, geometry = geometry), 
                    color = "black",
                    size = .1) +
                    labs(title = "Location of Accusations in November") +
-                  scale_fill_manual(values = c( "grey", "red"), na.value = "white") 
+                   scale_fill_manual(values = c( "grey", "red"), na.value = "white",
+                                    labels = c("None", "At least 1", "Never"))  +
+                   theme(legend.title = element_blank(), legend.position = "bottom")
 
 ```
 

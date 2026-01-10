@@ -146,11 +146,38 @@ save(salem_region, file = "data/salem_region.rda")
 
 
 # Compensation data
+# Source:http://swtdocuments.pem.org/documents/15/
 compensation <- read.delim(file = "rawdata/compensation.txt")
-compensation$total_amount <-20*compensation$lb. + compensation$s. +
+compensation$total <-20*compensation$lb. + compensation$s. +
   compensation$d./12
 compensation$gender <- c("Female", "Male", "Female", "Male", "Couple", "Female",
             "Male", "Female", "Female", "Couple", "Couple", "Female", "Female",
             "Female", "Female",
             "Female", "Female", "Female", "Female")
+compensation <- compensation |> rename(name = To, pounds = `lb.`, shillings = `s.`, pence =  `d.`)
+save(compensation, file = here::here("data/compensation.rda"), compress = "gzip")
 
+# this picks up where it is already created in the book repository
+forfeitures |> #ename(legal_status = table) |>
+               mutate(legal_status = gsub("Person_", "", legal_status, fixed = TRUE),
+                      marital_status = case_when(
+                             substr(`Marital Statues (if female) (source)`, 1, 7) == "Married" ~ "Married",
+                             substr(`Marital Statues (if female) (source)`, 1, 5 ) == "Widow" ~ "Widow",
+                             substr(`Marital Statues (if female) (source)`, 1, 6 ) == "Single" ~ "Single",
+                             TRUE ~ NA),
+                      forfeiture = case_when(
+                        substr(`1. evidence of foreiture (source) 2. Article seized`, 1, 5) == "1. No" ~ "No",
+                        substr(`1. evidence of foreiture (source) 2. Article seized`, 1, 6) == "1. Yes" ~ "Yes",
+                        TRUE ~ NA),
+                      reversed = case_when(substr(`Attainder reversed`, 1,2) == "No" ~ "No",
+                                           substr(`Attainder reversed`, 1,3) == "Yes" ~ "Yes",
+                                           TRUE ~ NA
+                                           )
+
+                      ) |> select(-`Marital Statues (if female) (source)`,
+                               -`1. evidence of foreiture (source) 2. Article seized`,
+                               -`Attainder reversed`,
+                               -`Legal statues (source),
+                               -Comments`)  ->
+       forfeitures
+save(forfeitures, file = here::here("data/forfeitures.rda"), compress = "gzip")
