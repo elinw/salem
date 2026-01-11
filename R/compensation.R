@@ -1,0 +1,17 @@
+#'  Compensation
+
+#' A data set containing the amount of compensation awarded in 1711.
+#' Order for payment of damages by Governor Joseph Dudley, December 17, 1711
+#'
+#' @format  A data frame with 19 rows and 6 variables:
+#' \describe{
+#' \item{name}{Name of those compensated}
+#' \item{pounds}{Pounds part}
+#' \item{shillings}{Shillings part}
+#' \item{pence}{Pence part}
+#' \item{total}{Total amount converted to pence}
+#' \item{gender}{Male, female or couple}
+#'  }
+#'
+#' @source \url{http://swtdocuments.pem.org/documents/15/}
+"compensation"
