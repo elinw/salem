@@ -1,7 +1,7 @@
 Package: salem
 Type: Package
 Title: Provides Access to Salem Witchcraft Data
-Version: 0.2.0
+Version: 1.0.0
 Authors@R: 
     c(person(given = "Elin",
              family = "Waring",
