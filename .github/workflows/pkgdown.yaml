@@ -38,9 +38,10 @@ jobs:
 
       - name: Cache R packages
         uses: actions/cache@v4
-
         with:
-          use-public-rspm: key
+          path: ~/.cache/R/ # or your specific cache path
+          key: R-${{ runner.os }}-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: R-${{ runner.os }}-
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
