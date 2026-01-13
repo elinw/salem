@@ -17,5 +17,5 @@
 #'   \item{Tax}{Tax paid}
 #'   \item{Sort}{ID from original data set}
 #' }
-#' @source \url{https://www.tulane.edu/~salem/Tax%20Comparison%20Data%20Set.html}
+#' @source \url{https://www2.tulane.edu/~salem/Tax%20Comparison%20Data%20Set.html}
 "tax_comparison"

@@ -15,7 +15,7 @@ A data frame with 69 rows and 5 variables:
 }
 }
 \source{
-\url{https://www.tulane.edu/~salem/Committee\%20List\%20Data\%20Set.html}
+\url{https://www2.tulane.edu/~salem/Committee\%20List\%20Data\%20Set.html}
 }
 \usage{
 committee_list

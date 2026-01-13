@@ -46,5 +46,5 @@
 #'   \item{November}{Number accused in November}
 #'   \item{TOWN_LABEL}{Town name to be used for labelling}
 #' }
-#' @source \url{https://docs.digital.mass.gov/dataset/massgis-data-community-boundaries-towns-survey-points}
+#' @source \url{ https://www.mass.gov/info-details/massgis-data-municipalities}
 "salem_region"

@@ -15,7 +15,7 @@ A data frame with 200 rows and 5 variables:
 }
 }
 \source{
-\url{https://www.tulane.edu/~salem/Tax\%20Comparison\%20Data\%20Set.html}
+\url{https://www2.tulane.edu/~salem/Tax\%20Comparison\%20Data\%20Set.html}
 }
 \usage{
 tax_comparison

@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 ```
 
 The Salem package is based on the 
-[The Salem Withcraft Website](https://www.tulane.edu/~salem/) created by
+[The Salem Withcraft Website](https://www2.tulane.edu/~salem/) created by
 Richard Latner.  The package includes all of the data sets from the website
 as R data frames.  The data have been reorganized from the original structure
 for ease of use in R.  (Copies of the original tab delimited raw data sets
@@ -29,11 +29,11 @@ for this package.)
 ### References
 
 A detailed discussion of the data sources can be found on the
-[ the notes page of the website](https://www.tulane.edu/~salem/Notes.html).
+[ the notes page of the website](https://www2.tulane.edu/~salem/Notes.html).
 .
 
 A list of scholarly sources about the Salem witch trials (through about 2008)
-is on the [bibliography page](https://www.tulane.edu/~salem/Bibliography.html).
+is on the [bibliography page](https://www2.tulane.edu/~salem/Bibliography.html).
 
 An updated list of reference website links from the bibliography page 
 is given here.

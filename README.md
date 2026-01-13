@@ -4,7 +4,7 @@
 
 <!-- badges: start -->
 <!-- badges: end -->
-The goal of salem is to provide access to data and other materials related to the Salem Witchcraft Trials which took place in Salem, Massachusetts and the surrounding region in 1692. It is based on the work of historian Richard Latner which is available at [The Salem Witchcraft Site](https://www.tulane.edu/~salem/).
+The goal of salem is to provide access to data and other materials related to the Salem Witchcraft Trials which took place in Salem, Massachusetts and the surrounding region in 1692. It is based on the work of historian Richard Latner which is available at [The Salem Witchcraft Site](https://www2.tulane.edu/~salem/).
 
 ## Installation
 

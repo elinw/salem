@@ -14,7 +14,7 @@ A data frame with 137 rows and 5 variables:
 }
 }
 \source{
-\url{https://www.tulane.edu/~salem/Salem\%20Village\%20Data\%20Set.html}
+\url{https://www2.tulane.edu/~salem/Salem\%20Village\%20Data\%20Set.html}
 }
 \usage{
 salem_village
