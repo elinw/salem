@@ -5,11 +5,7 @@
 \alias{forfeitures}
 \title{forfeitures
 A data set containing list of forfeitures for those who were condemned, escaped,
-and stoodcmute during trial. Name, Marital Status (If married) and source,
-\enumerate{
-\item evidence of forfeiture (source) 2. Article seized, Legal statues (source),
-Attainder reversed, and Comments.
-}}
+and stood mute during trial.}
 \format{
 A data frame with 30 rows and 6 variables with the name Person_condemned:
 \describe{
@@ -18,7 +14,6 @@ A data frame with 30 rows and 6 variables with the name Person_condemned:
 \item{marital_status}{The marital status for females }
 \item{forfeiture}{The evidence that a forfeiture was ordered}
 \item{reversed}{Was the declaration of the attainders was reversed }
-
 }
 
 The source has some Key Tables which are:
@@ -46,10 +41,6 @@ forfeitures
 \description{
 forfeitures
 A data set containing list of forfeitures for those who were condemned, escaped,
-and stoodcmute during trial. Name, Marital Status (If married) and source,
-\enumerate{
-\item evidence of forfeiture (source) 2. Article seized, Legal statues (source),
-Attainder reversed, and Comments.
-}
+and stood mute during trial.
 }
 \keyword{datasets}

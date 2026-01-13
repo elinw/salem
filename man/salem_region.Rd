@@ -38,7 +38,7 @@ A simple features data frame with 437 rows and 28 variables:
 }
 }
 \source{
-\url{https://docs.digital.mass.gov/dataset/massgis-data-community-boundaries-towns-survey-points}
+\url{ https://www.mass.gov/info-details/massgis-data-municipalities}
 }
 \usage{
 salem_region
