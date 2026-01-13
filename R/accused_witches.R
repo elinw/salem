@@ -14,5 +14,5 @@
 #'   \item{Month.of.Execution.Name}{Month of execution as ordered factor. Missing for those not executed.}
 #'   \item{executed}{Indicator of whether the accused was executed}
 #' }
-#' @source \url{https://www.tulane.edu/~salem/Accused%20Witches.html}
+#' @source \url{https://www2.tulane.edu/~salem/Accused%20Witches.html}
 "accused_witches"

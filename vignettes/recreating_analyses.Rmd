@@ -25,7 +25,7 @@ library(tidyr)
 library(salem)
 ```
 
-The [Salem Witchcraft Website](https://www.tulane.edu/~salem/index.html)
+The [Salem Witchcraft Website] (https://www2.tulane.edu/~salem/index.html)
 presents a number of data analyses and explains how to reproduce them
 using Excel. This vignette will document how to as closely as possible
 reproduce those analyses using R.  In some cases the analyses will be 
@@ -477,7 +477,7 @@ addmargins( table(salem_village$Petition, salem_village$Church.to.1696,
 
 As explained on the website, the Village of Salem was governed by a Committee of 
 Five in addition to the Town Meeting 
-[see Salem Village Politics](https://www.tulane.edu/~salem/Politics%20Intro.html).
+[see Salem Village Politics](https://www2.tulane.edu/~salem/Politics%20Intro.html).
 
 The data set that is part of this package called committee_list is 
 structured differently than the original data. It is in "long" format with
@@ -511,7 +511,7 @@ table( committee_list$Petition, committee_list$Social )
 
 To adjust for this and get the data matching the website
 we need to remove those duplicates. Then the table matches that found at
-[Committee Social Report](https://www.tulane.edu/~salem/Committeemen%20Social%20Report.html).
+[Committee Social Report](https://www2.tulane.edu/~salem/Committeemen%20Social%20Report.html).
 
 ```{r}
 committee_list2 <-  committee_list |> group_by(Committee.Members) |> 
@@ -527,7 +527,7 @@ addmargins(table( committee_list2$Petition, committee_list2$Social ))
 
 The tax_comparison data set is also set up in long format. This can then be
 used to create a comparison table similar to the table on 
-[Tax Comparison](https://www.tulane.edu/~salem/1690%20Tax%20Comparisons.html).
+[Tax Comparison](https://www2.tulane.edu/~salem/1690%20Tax%20Comparisons.html).
 One limitation is that R does not have a built in function for the mode.
 
 This is the most complex analysis on the website. Complications include
@@ -648,7 +648,7 @@ purposes. The example below is not necessarily the best or most efficient.
 To do the analysis we need to obtain the rank and percentile for each
 of the tax amounts within the years.  Finally, we need to compare those. 
 In this example we will focus on the 
-[1681-1690 comparison shown](https://www.tulane.edu/~salem/1681-90%20Rank.html) 
+[1681-1690 comparison shown](https://www2.tulane.edu/~salem/1681-90%20Rank.html) 
 while providing a framework for the others.
 
 First create a wide data set and calculate ranks and cumulative proportions. 
