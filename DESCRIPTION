@@ -23,6 +23,9 @@ Description: Data related to the Salem Witch Trials
 License: CC BY-NC-SA 4.0
 Encoding: UTF-8
 LazyData: true
+URL: https://elinw.github.io/salem/,
+    https://github.com/elinw/salem/
+BugReports: https://github.com/elinw/salem/issues
 Depends:
     R (>= 4.1.0)
 Imports:
