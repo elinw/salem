@@ -2,5 +2,6 @@ template:
   params:
     bootstrap: 5
     bootswatch: sandstone
+    heading_font: {google: "Meddon"}
   default_assets: false
 url: https://elinw.github.io/salem
