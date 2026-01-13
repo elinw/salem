@@ -1,5 +1,6 @@
 template:
   params:
+    bootstrap: 5
     bootswatch: sandstone
   path: inst/pkgdown/templates/
   default_assets: false
